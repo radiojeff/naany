@@ -379,8 +379,10 @@ void dump()
         printf("%s\t%d\n", ContinentName[i].c_str(), by_continent[i]);
     }
 
-    printf("\n\nSCORE: NAANY [%d] * Continents [%d] * Bands [%d] = %d",
+    printf("\n\nSCORE: NAANY [%d] * Continents [%d] * Bands [%d] = %d\n",
         naanies, uniq_cont, uniq_bands, naanies * uniq_cont * uniq_bands);
+
+    printf("Thanks for playing.\n\n");
 }
 
 int show_help()
