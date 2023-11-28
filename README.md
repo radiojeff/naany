@@ -11,6 +11,27 @@ See [WWDXC NAANY Award](https://www.wwdxc.org/awards/naany/)
 The program is a console application.  It is not GUI, it has no user
 window interface.  You execute it from the command line.
 
+# If you just want to run it...
+
+If you just want the software, then download it from here:
+
+It's a raw EXE binary.  Right-click the link, save-as to your PC.
+
+When you run it on your PC, your Windows will go berzerk over this because
+it's not signed or in anyway in possession of the "special sauce" that
+makes Windows Virus Defense happy.  So what.  You have the source here
+and why on earth would I bother messing with your PC.  I don't have time
+to mess with my own PC.
+
+[Naany.exe](http://w7brs.com/naany/naany.exe)
+
+
+# How to Build it
+
+1. Open the Solution in Visual Studio
+2. Build
+
+
 # How to use it.
 
 
