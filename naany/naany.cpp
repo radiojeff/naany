@@ -336,6 +336,8 @@ void apply_metrics()
 void dump()
 {
     // now print out the list.
+    std::string needed;
+
     printf("\n    ");
     for (int i = 0; i < 10; i++) {
         printf(" %d ", i);
@@ -349,8 +351,24 @@ void dump()
         {
             printf(" %c ",
                 naany[(26 * j) + i] > 0 ? 'Y' : ' ');
+
+            if (naany[(26 * j) + i] < 1) 
+            {
+                // they need this combo.
+                char needed_letter = 'A' + i;
+                char needed_number = '0' + j;
+                needed += needed_number;
+                needed += needed_letter;
+                needed += "\n";
+            }
         }
         printf("\n");
+    }
+
+    if ( needed.length() > 0) 
+    {
+       printf("\nWhat you need:\n");
+       printf("%s\n", needed.c_str());
     }
     printf("\n");
     printf("Summary:   %d worked,  %d unworked.", naanies, 260 - naanies);
