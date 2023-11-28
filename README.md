@@ -62,6 +62,28 @@ yours and the only arbiter of the score that matters is the
 Western Washington DX Club officials.  The Software does not represent
 or have the authority to give you official ranking or score.
 
+# Bugs
+
+There is probably a few bugs in it, but I cannot see them right
+at the moment.  We'll find out more through better testing with
+different ADIF files that are run through.
+
+As far as things to fix:
+
+1.  Make the Application a GUI application.  Open the ADIF, and show
+visually the progress towards full NAANY.
+2.  Or, make the application web-based (preferred) except it involves some
+PHP work to address how to process data files without saving them.  I don't
+want to store any log files (nor have access to them really).  Log files
+are personal.
+3.  Decide if the application should be interactive (ask questions and
+require settings made or just run freely).   I'f prefer it was not
+a busy application and just runs freely.  The settings/configuration should
+not be a complicated affair.
+4.  Generate a filter string that can be cut-pasted into any Spotting Network tool (VE7CC, or whatever...) so that finding the missing NAANY combinations is easier.  Also, figure out how to produce a cut-paste string that can be provided
+to JTAlert software since a lot of the entries are likely from FT-8/FT-4 etc..
+
+
 # Disclaimer
 
 Use the Software to just get your NAANY score from your log file.  
