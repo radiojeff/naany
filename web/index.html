@@ -1,0 +1,243 @@
+<!doctype html>
+<!--
+This software is licensed under BSD 3-Clause License
+Copyright (c) Jeff Wandling W7BRS
+-->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>NAANY Log Upload</title>
+  <style>
+    :root {
+      --navy: #0b2f52;
+      --navy-light: #164a7a;
+      --sky: #2f7fc4;
+      --amber: #d98324;
+      --amber-dark: #b36a18;
+      --paper: #f4f7fb;
+      --ink: #152434;
+    }
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 2.5rem 1.5rem;
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy) 160px, var(--paper) 160px);
+      background-repeat: no-repeat;
+      color: var(--ink);
+    }
+    h1 {
+      max-width: 34rem;
+      margin: 0 auto 1.5rem;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    form {
+      max-width: 34rem;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #d7e0ea;
+      border-radius: 10px;
+      padding: 1.75rem 2rem;
+      box-shadow: 0 8px 24px rgba(11, 47, 82, 0.15);
+    }
+    form p { margin: 0 0 1.25rem; }
+    label { font-weight: 600; color: var(--navy); display: inline-block; margin-bottom: 0.3rem; }
+    .field-row { display: flex; gap: 1rem; margin: 0 0 1.25rem; }
+    .field-row > div { flex: 1; }
+    .field-row p { margin: 0; }
+    .continent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 1rem;
+      row-gap: 0.3rem;
+    }
+    input[type="text"], input[type="number"], input[type="file"] {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.5rem 0.65rem;
+      border: 1px solid #c3d0e0;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    input[type="text"]:focus, input[type="number"]:focus, input[type="file"]:focus {
+      outline: none;
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(47, 127, 196, 0.25);
+    }
+    fieldset {
+      border: 1px solid #c3d0e0;
+      border-radius: 6px;
+      margin: 0 0 1.25rem;
+      padding: 0.75rem 1rem 1rem;
+    }
+    legend {
+      font-weight: 600;
+      color: var(--navy);
+      padding: 0 0.4rem;
+    }
+    fieldset label {
+      font-weight: 400;
+      color: var(--ink);
+      display: inline;
+      margin-bottom: 0;
+    }
+    button#upload-button {
+      display: block;
+      width: 100%;
+      padding: 0.7rem 1rem;
+      background: var(--amber);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+    }
+    button#upload-button:hover { background: var(--amber-dark); }
+    button#upload-button:disabled { background: #b9bfc8; cursor: default; }
+    #upload-status { margin: 1.25rem auto 0; max-width: 34rem; }
+    progress { width: 100%; height: 1.2rem; accent-color: var(--sky); }
+    #upload-label { font-size: 0.9rem; color: var(--navy); }
+  </style>
+</head>
+<body>
+  <h1>NAANY Log Upload v1.6</h1>
+  <form id="upload-form" action="process.php" method="post" enctype="multipart/form-data">
+    <div class="field-row">
+      <div>
+        <label for="callsign">Your callsign:</label>
+        <input type="text" id="callsign" name="callsign" style="text-transform: uppercase;" required>
+      </div>
+      <div>
+        <label for="year">Year to apply:</label>
+        <input type="number" id="year" name="year" min="1970" max="2100" required>
+      </div>
+    </div>
+    <p>
+      <label for="logfile">Select your ADIF (.adi) log file:</label><br>
+      <input type="file" id="logfile" name="logfile" accept=".adi,.adif" required>
+    </p>
+    <fieldset>
+      <legend>Your home continent (QSOs with stations on this continent don't count):</legend>
+      <div class="continent-grid">
+        <label><input type="radio" name="home_continent" value="NA" checked> North America</label>
+        <label><input type="radio" name="home_continent" value="SA"> South America</label>
+        <label><input type="radio" name="home_continent" value="EU"> Europe</label>
+        <label><input type="radio" name="home_continent" value="AS"> Asia</label>
+        <label><input type="radio" name="home_continent" value="AF"> Africa</label>
+        <label><input type="radio" name="home_continent" value="OC"> Oceania</label>
+        <label><input type="radio" name="home_continent" value="AN"> Antarctica</label>
+      </div>
+    </fieldset>
+    <button type="submit" id="upload-button">Upload</button>
+  </form>
+
+  <div id="upload-status" hidden>
+    <p id="upload-label">Uploading…</p>
+    <progress id="upload-progress" value="0" max="100"></progress>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+      var form = document.getElementById("upload-form");
+      var button = document.getElementById("upload-button");
+      var status = document.getElementById("upload-status");
+      var label = document.getElementById("upload-label");
+      var bar = document.getElementById("upload-progress");
+      var homeContinentRadios = document.getElementsByName("home_continent");
+      var yearField = document.getElementById("year");
+      var callsignField = document.getElementById("callsign");
+      var logfileField = document.getElementById("logfile");
+
+      if (!yearField.value) {
+        yearField.value = new Date().getFullYear();
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Explicit guards here rather than relying solely on the browser's
+        // built-in constraint validation -- preventDefault() above means
+        // the native "required" popups never fire, so each required field
+        // needs its own check before the upload proceeds.
+        callsignField.value = callsignField.value.trim().toUpperCase();
+        if (!callsignField.value) {
+          alert("Please enter your callsign before uploading.");
+          callsignField.focus();
+          return;
+        }
+
+        if (!logfileField.files || logfileField.files.length === 0) {
+          alert("Please select your ADIF log file before uploading.");
+          logfileField.focus();
+          return;
+        }
+
+        if (!yearField.value) {
+          alert("Please enter the year to apply before uploading.");
+          yearField.focus();
+          return;
+        }
+
+        var homeContinentChecked = false;
+        for (var i = 0; i < homeContinentRadios.length; i++) {
+          if (homeContinentRadios[i].checked) {
+            homeContinentChecked = true;
+            break;
+          }
+        }
+        if (!homeContinentChecked) {
+          alert("Please select your home continent before uploading.");
+          return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        var formData = new FormData(form);
+
+        button.disabled = true;
+        status.hidden = false;
+        bar.value = 0;
+        label.textContent = "Uploading… 0%";
+
+        // Tracks actual bytes sent over the network -- this is the real
+        // bottleneck for large files, not server-side processing (PHP
+        // doesn't even start running until the whole upload has arrived).
+        xhr.upload.addEventListener("progress", function (evt) {
+          if (evt.lengthComputable) {
+            var pct = Math.round((evt.loaded / evt.total) * 100);
+            bar.value = pct;
+            label.textContent = "Uploading… " + pct + "%";
+          }
+        });
+
+        xhr.upload.addEventListener("load", function () {
+          label.textContent = "Processing…";
+          bar.removeAttribute("value"); // indeterminate while the server works
+        });
+
+        xhr.addEventListener("load", function () {
+          document.open();
+          document.write(xhr.responseText);
+          document.close();
+        });
+
+        xhr.addEventListener("error", function () {
+          label.textContent = "Upload failed. Please try again.";
+          button.disabled = false;
+        });
+
+        xhr.open("POST", form.action);
+        xhr.send(formData);
+      });
+    })();
+  </script>
+</body>
+</html>
