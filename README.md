@@ -1,93 +1,57 @@
-# The NAANY Award Calculator
+# NAANY Calculator
 
+This is a suite of scripts and HTML content that produces
+a web based calculator for the WWDXC NAANY award.
 
-This is a Software tool to calculate the score of the NAANY award.
+The Western Washington DX Club sponsors this "award".
+[NAANY Award](https://www.wwdxc.org/awards/naany/)
 
-See [WWDXC NAANY Award](https://www.wwdxc.org/awards/naany/)
+The award is a count of the number of times a call-sign is logged
+where the first number followed by a letter in the call-sign is counted.
 
+* W1ABC counts for 1A
+* K8BNM counts for 8B
+* and so on.
 
-# The Software
+There are 260 such combinations.
 
-The program is a console application.  It is not GUI, it has no user
-window interface.  You execute it from the command line.
+The software here will accept the ADIF file exported by the user's log
+program and analyze the log file.
 
-# How to Build it
+The software here will produce web based content revealing the score of
+the user as it relates to the calculation metrics of the NAANY award.
 
-1. Open the Solution in Visual Studio
-2. Build
+# Concept
 
+The concept is simple.  When the user begins uploading a file, the
+mechanism in the HTML relies on AJAX to make periodic polling of
+PHP code to detect the progress.  When the file has been uploaded, 
+a handler (handle-upload.php) performs the work against the uploaded file.
 
-# How to use it.
+In this case, it parses the ADIF file.
 
-1. Export your log into ADIF format.   All logging software can do this.
-Just find the option to export your log and save it as ADI (ADIF) format.
-2. Open a command prompt (In Windows, from the "Start" menu, just run "cmd")
-3. From the Text based command shell, invoke this Software as follows:
+When the parsing is done, a long array of data is returned as JSON back
+to the AJAX asynchronous routine.   
 
-```
-naany.exe CONT FILE
-```
+After that successful callback, the dynamic content of the parent page
+(index.html) is modified by adjusting the Style Class of certain elements
+in the matrix (thus turning on/off the icons), and also dynamically populating
+the text of certain `<DIV></DIV>` fields to suit.
 
-Where `CONT` is the continent that you want to exclude -- yours.  So for
-those in North America, the `CONT` value is `NA`.
+The JSON bundle that comes out of the `handle-upload.php` is the key to
+obtaining the results of the parse, therefore the results of whatever
+action has taken place while parsing the ADIF file.
 
-The `FILE` parameter is the path to the ADIF file you exported.
+## Deployment
 
-So, if you saved your file as `my_log_file.adi`  then the invocation would be
+A suitable PHP environment is required.  Preferably 8.x or better.
+It has not been tested on earlier versions of PHP.  It relies on the
+uploadprogress extension.
 
-```
-naany.exe na my_log_file.adi
-```
+## Credit
 
-The name of the `CONT` is not case sensitive.  `NA` and `na` are the same
-thing.
+Credit to Ben Ramsey for the skeleton of the upload progress example.
 
-4.  The Software will run and compute your score.  Let it finish.
-5.  The Software **does NOT modify** your log file.
-6.  The Software will stop and yield the score after the 260 NAANY score
-    is reached, or the end of the file is reached -- whichever is first.
+[Upload Progress Example](https://github.com/php/pecl-php-uploadprogress/blob/master/examples/handle-upload.php)
 
-
-# Modified Score
-
-While the Software will compute your raw NAANY score (0-260), the Software
-also adds a bit of competition by calculating an additional score.
-
-The additional score is your NAANY score multiplied by the number of
-unique bands and the number of unique continents from which you derived
-your NAANY score.   The continent count and the band count are multipliers.
-
-Use the modified score, or use the raw basic NAANY score -- the choice is
-yours and the only arbiter of the score that matters is the 
-Western Washington DX Club officials.  The Software does not represent
-or have the authority to give you official ranking or score.
-
-# Bugs
-
-There is probably a few bugs in it, but I cannot see them right
-at the moment.  We'll find out more through better testing with
-different ADIF files that are run through.
-
-As far as things to fix:
-
-1.  Make the Application a GUI application.  Open the ADIF, and show
-visually the progress towards full NAANY.
-2.  Or, make the application web-based (preferred) except it involves some
-PHP work to address how to process data files without saving them.  I don't
-want to store any log files (nor have access to them really).  Log files
-are personal.
-3.  Decide if the application should be interactive (ask questions and
-require settings made or just run freely).   I'f prefer it was not
-a busy application and just runs freely.  The settings/configuration should
-not be a complicated affair.
-4.  Generate a filter string that can be cut-pasted into any Spotting Network tool (VE7CC, or whatever...) so that finding the missing NAANY combinations is easier.  Also, figure out how to produce a cut-paste string that can be provided
-to JTAlert software since a lot of the entries are likely from FT-8/FT-4 etc..
-
-
-# Disclaimer
-
-Use the Software to just get your NAANY score from your log file.  
-This Software in no way whatsoever grants the user title, privilege or
-rank, status, award, or anything at all.  It's just a utility.. Have fun.
-
-
+Other changes were made by the author.
