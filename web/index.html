@@ -188,29 +188,48 @@ EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
                processData: false,
                method: 'POST',
                dataType: 'json',
-               success: function (what) {
+               success: function (userscore) {
                    clearInterval(poll);
                    updateProgressBar(100);
-                   for(var k in what) {
+
+                   // When the JSON data from the handle-upload.php
+                   // is received, it's in the map of userscore 
+                   for(var k in userscore) {
+
+                       // We're going to modify objects in the page, by ID
+                       // The keys of each element in the map is named
+                       // to match the ID names of the web content entities.
                        var kk = '#'+k; 
-                       console.log(k);
-                       console.log(what[k]);
+
+                       // Logging for debugging
+                       // console.log(k);
+                       // console.log(userscore[k]);
+
+                       // Each of the members that deal with the Red/Green
+                       // checkboxes are named slot_#X
                        if (k.includes("slot"))
                        {   
-                           if (what[k] == 'X') 
+                           // severely pedantic...  They worked this combo
+                           if (userscore[k] == 'X') 
                            {
+                              // If the page was not reloaded, then clear
+                              // and reset
                               $(kk).removeClass('nw');
                               $(kk).addClass('wo');
                            }
                            else 
                            {
+                              // If the page was not reloaded, then clear
+                              // and reset
                               $(kk).removeClass('wo');
                               $(kk).addClass('nw');
                            }
                        } 
                        else
                        {
-                           $(kk).text(what[k]);
+                           // All (nearly) of the other elements are
+                           // text fields that are updated in this page.
+                           $(kk).text(userscore[k]);
                        }
                    }
                  },
@@ -220,14 +239,19 @@ EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
                  pollForProgress(identifier, fileField['name']);
             }, 500);
 
+            // jdw -- deciding to not reset the form.  the trouble
+            // with resetting the form is if the user picks a continent
+            // not default, when they Upload the UI snaps the radio button
+            // selected to the default.
             // uploadForm.reset();
+
             generateUploadIdentifier();
 		        
-             }
-             else
-             {
-                 alert('You should choose a file.')
-             }
+            }
+            else
+            {
+                alert('You should choose a file.')
+            }
           });
      });
 
