@@ -33,7 +33,7 @@ to the AJAX asynchronous routine.
 After that successful callback, the dynamic content of the parent page
 (index.html) is modified by adjusting the Style Class of certain elements
 in the matrix (thus turning on/off the icons), and also dynamically populating
-the text of certain <DIV>..</DIV> fields to suit.
+the text of certain `<DIV></DIV>` fields to suit.
 
 The JSON bundle that comes out of the `handle-upload.php` is the key to
 obtaining the results of the parse, therefore the results of whatever
