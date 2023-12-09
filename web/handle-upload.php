@@ -462,18 +462,18 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
       // ALL QSO on each line have a Band marker.  We don't
       // care what the band is, but we know a line with 'Band'
       // is a line with a potential QSO to investigate.
-      if ( preg_match('/^<Band/', $x, $matches))
+      if ( preg_match('/^<BAND/i', $x, $matches))
       {
       
       // ADIF puts the QSO_DATE field.  It's going to be YYYYMMDD
       // format. So we only care about the first four digits YYYY
-      if ( preg_match("/<QSO_DATE:\d+>${curYear}.*/", $x, $matches))
+      if ( preg_match("/<QSO_DATE:\d+>${curYear}.*/i", $x, $matches))
       {
 
       // Here we find the DXCC ID of the Log entry.
       // We cannot depend on the CONT field, but we can depend
       // on the DXCC field... so we grab the value. (captured)
-      if (preg_match('/<DXCC:\d+>(\d+).*/', $x, $matches))
+      if (preg_match('/<DXCC:\d+>(\d+).*/i', $x, $matches))
       {
           // The candidate DXCC ID of this Log entry
           $thiscont = dx2cont($matches[1]);
@@ -488,12 +488,12 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
 
        // Candidate NAANY entity.. so let's figure out the magic...
        // We want the call sign of the contact
-       if (preg_match('/<Call:\d+>([^\s]+).*/', $x, $matches))
+       if (preg_match('/<CALL:\d+>([^\s]+).*/i', $x, $matches))
        {
-           $call = $matches[1];
+           $call = strtoupper($matches[1]);
            // Unlikely to fail but we want to make sure we have 
            // the first DIGIT LETTER match found.
-           if (preg_match('/(\d)([A-Z])/', $call, $matches)) 
+           if (preg_match('/(\d)([A-Z])/i', $call, $matches)) 
            {
                $num = $matches[1];
                $let = $matches[2];
