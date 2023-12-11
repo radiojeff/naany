@@ -1,101 +1,104 @@
 <!doctype html>
 <html lang="en">
-<head>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif&display=swap" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-   <title>WWDXC NAANY Award Calculator</title>
-   <style>
-        tbody tr:nth-child(odd) { background: #EEE; }
-        tbody tr:td.nth-child(even) { background: #DDD; }
-        .hcon {
-           border-bottom: 1px solid black; 
-           border-top: 1px solid black; 
-           border-left: 1px solid black; 
-           border-right: 1px solid black; 
-        }
-        .hcd {
-           font-weight:bold;
-           font-size:12px;
-        }
-        .nwk {
-           border-bottom: 1px solid black; 
-           border-top: 1px solid black; 
-        }
-        .nwkl {
-           border-left: 1px solid black; 
-        }
-        .nwkr {
-           border-right: 1px solid black; 
-        }
-        .nwkd {
-           font-weight:bold;
-           font-size:12px;
-        }
-        .ncl {
-          border-bottom: 1px solid black; 
-          border-right: 1px solid black; 
-          border-left: 1px solid black; 
-          border-top: 1px solid black;
-          border-spacing: 0;
-          border-collapse: collapse;
-          padding:0;
-          width:18px;height:14px;background-repeat:no-repeat;
-        }
-        .wo  {
-           width:18px;height:14px;
-           border-spacing: 0;
-           border-collapse: collapse;
-           padding:0;
-           background: #DDD;
-           background:url(/naany/bw.png);
-        }
-        .nw  {
-           border-spacing: 0;
-           border-collapse: collapse;
-           padding:0;
-           width:18px;height:14px;
-           background: #EEE;
-           background:url(/naany/bnw.png);
-        }
-        .lnw  {
-           text-align: center;
-           vertical-align: middle;
-           width:17px;height:13px;
-           font-size:12px;
-           background: #CCC;
-        }
-        BODY { 
-           font-family: 'Roboto', sans-serif;
-        }
-  </style>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>WWDXC NAANY Award Calculator</title>
+<style>
+textarea, input, button, select { font-family: inherit; font-size: inherit; }
+textarea {
+  width: 4in;
+  height: 2in;
+}
+tbody tr:nth-child(odd) { background: #EEE; }
+tbody tr:td.nth-child(even) { background: #DDD; }
+.hcon {
+   border-bottom: 1px solid black; 
+   border-top: 1px solid black; 
+   border-left: 1px solid black; 
+   border-right: 1px solid black; 
+}
+.hcd {
+   font-weight:bold;
+   font-size:12px;
+}
 
-  </head>
-  <body style="width=1600px;font-family:'Oxygen Mono';font-size:12px;">
-     <div class="container my-5">
+.nwk {
+   border-bottom: 1px solid black; 
+   border-top: 1px solid black; 
+}
+.nwkl {
+   border-left: 1px solid black; 
+}
+.nwkr {
+   border-right: 1px solid black; 
+}
+.nwkd {
+   font-weight:bold;
+   font-size:12px;
+}
 
-     <!-- the layout is two main colums. -->
-     <!--  One for the form and one for  the data -->
-     <table>
-     <tr>
-      <!-- form side -->
+.ncl {
+  border-bottom: 1px solid black; 
+  border-right: 1px solid black; 
+  border-left: 1px solid black; 
+  border-top: 1px solid black;
+    border-spacing: 0;
+    border-collapse: collapse;
+   padding:0;
+  width:18px;height:14px;background-repeat:no-repeat;
+}
+.wo  {
+   width:18px;height:14px;
+    border-spacing: 0;
+    border-collapse: collapse;
+   padding:0;
+   background: #DDD;
+   background:url(/naany/bw.png);
+}
+.nw  {
+    border-spacing: 0;
+    border-collapse: collapse;
+   padding:0;
+   width:18px;height:14px;
+   background: #EEE;
+   background:url(/naany/bnw.png);
+}
+.lnw  {
+text-align: center;
+    vertical-align: middle;
+   width:17px;height:13px;
+   font-size:12px;
+  background: #CCC;
+}
+BODY { 
+  font-family: 'Roboto Mono';
+}
+</style>
 
-     <td style="vertical-align:top;">
-     <h3>WWDXC NAANY Award Calculator</h3>
+    </head>
+<body style= "width=1600px;font-size:12px;font-family:'Roboto Mono';'>
+        <div class="container my-5">
+
+<table>
+<tr>
+<td style="vertical-align:top;">
+<h3>WWDXC NAANY Award Calculator</h3>
+
 This is the un-official Western Washington DX Club NAANY Award calculator.
 <p>
-For Rules and Information go to:
-<a href="https://www.wwdxc.org/awards/naany/">NAANY Rules</a>
+ For Rules and Information go to:
+ <a href="https://www.wwdxc.org/awards/naany/">NAANY Rules</a>
 <p>
-Award Creator: Jack Bock, K7ZR
+ Award Creator: Jack Bock, K7ZR
 <p>
-WWDXC Un-offcial NAANY CALCULATOR By Jeff Wandling, W7BRS
+ WWDXC Un-offcial NAANY CALCULATOR By Jeff Wandling, W7BRS
 <br>
 <p>
 <b>Instructions:</b>
@@ -107,52 +110,44 @@ WWDXC Un-offcial NAANY CALCULATOR By Jeff Wandling, W7BRS
 </ol>
 </p> 
      <form id="uploadprogressForm">
-       <input id="uploadprogressIdentifier" 
-              type="hidden" 
-              name="UPLOAD_IDENTIFIER" value="">
+         <input id="uploadprogressIdentifier" type="hidden" name="UPLOAD_IDENTIFIER" value="">
+         <div class="form-group">
 
-       <!-- The form inputs -->
-       <div class="form-group">
 <b>You</b> are in which Continent?<br>
-NA <input type='radio' name='mycont' value='NA' checked> &nbsp;
-SA <input type='radio' name='mycont' value='SA'> &nbsp;
-EU <input type='radio' name='mycont' value='EU'> &nbsp;
-AF <input type='radio' name='mycont' value='AF'> &nbsp;
-AS <input type='radio' name='mycont' value='AS'> &nbsp;
-OC <input type='radio' name='mycont' value='OC'> &nbsp;
-AN <input type='radio' name='mycont' value='AN'> &nbsp;
-AS-AF <input type='radio' name='mycont' value='AS-AF'> &nbsp;
-EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
+NA <input type='radio' name='mycont' value='NA' checked>
+&nbsp;
+SA <input type='radio' name='mycont' value='SA'>
+&nbsp;
+EU <input type='radio' name='mycont' value='EU'>
+&nbsp;
+AF <input type='radio' name='mycont' value='AF'>
+&nbsp;
+AS <input type='radio' name='mycont' value='AS'>
+&nbsp;
+OC <input type='radio' name='mycont' value='OC'>
+&nbsp;
+AN <input type='radio' name='mycont' value='AN'>
+&nbsp;
+AS-AF <input type='radio' name='mycont' value='AS-AF'>
+&nbsp;
+EU-AS <input type='radio' name='mycont' value='EU-AS'>
+<p>
 <br>
-        <div class="custom-file">
-            <input type="file" 
-                   class="custom-file-input"
-                   name="uploadprogressFile"
-                   id="uploadprogressFile">
-            <label class="custom-file-label"
-                   for="uploadprogressFile">Choose a file to upload</label>
-       </div>
-    </div>
+             <div class="custom-file">
+                 <input type="file" class="custom-file-input" name="uploadprogressFile" id="uploadprogressFile">
+                 <label class="custom-file-label" for="uploadprogressFile">Choose a file to upload</label>
+             </div>
+         </div>
 
 
-    <button id="uploadprogressSubmit"
-            type="button"
-            class="btn btn-primary">Upload ADIF File</button>
-    </form>
+         <button id="uploadprogressSubmit" type="button" class="btn btn-primary">Upload ADIF File</button>
+     </form>
+     <div class="progress mt-5">
+         <div id="fileUploadProgress" class="progress-bar" role="progressbar" style="width: 0;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+     </div>
 
-    <!-- progress bar -->
-    <div class="progress mt-5">
-       <div id="fileUploadProgress" 
-            class="progress-bar"
-             role="progressbar"
-              style="width: 0;"
-              aria-valuenow="0"
-              aria-valuemin="0"
-             aria-valuemax="100">0%</div>
-        </div>
-    </div> <!-- top div -->
+ </div> <!-- top div -->
 
-<!-- form behavior controlled here for the progbar -->
  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
@@ -161,154 +156,121 @@ EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
  <script type="text/javascript">
      let poll;
      let identifier;
-     $(document).ready(function()
-     {
-         bsCustomFileInput.init();
-         generateUploadIdentifier();
-         $('#uploadprogressSubmit').click(async function() {
-           const fileField = document.getElementById('uploadprogressFile')
-           const uploadForm = document.getElementById('uploadprogressForm');
-           const formData = new FormData(uploadForm);
-           updateProgressBar(0);
-           $('#mediaType').addClass('d-none');
-           $('#mediaIcon').removeClass();
-           $('#progressDetails').addClass('d-none');
 
-          // We do this so the user has time to see that the progress
-          // bar has reset to 0% and is starting to upload.
-          await sleep(500);
-          identifier = $('#uploadprogressIdentifier').val();
-          if (fileField.files.length > 0) 
-          {
+     $(document).ready(function() {
+      $('#report-panel').hide();
+       bsCustomFileInput.init();
+       generateUploadIdentifier();
+
+       $('#uploadprogressSubmit').click(async function() {
+        const fileField = document.getElementById('uploadprogressFile')
+        const uploadForm = document.getElementById('uploadprogressForm');
+        const formData = new FormData(uploadForm);
+
+       updateProgressBar(0);
+       $('#mediaType').addClass('d-none');
+       $('#mediaIcon').removeClass();
+       $('#progressDetails').addClass('d-none');
+
+       // We do this so the user has time to see that the progress
+       // bar has reset to 0% and is starting to upload.
+       await sleep(500);
+
+       identifier = $('#uploadprogressIdentifier').val();
+
+       if (fileField.files.length > 0) {
             $.ajax({
-               url: 'handle-upload.php',
-               data: formData,
-               cache: false,
-               contentType: false,
-               processData: false,
-               method: 'POST',
-               dataType: 'json',
-               success: function (userscore) {
-                   clearInterval(poll);
-                   updateProgressBar(100);
+                     url: 'fixup.php',
+                     data: formData,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
+                     method: 'POST',
+                     dataType: 'json',
+                     success: function (what) {
+                         $('#report-panel').show();
+                         clearInterval(poll);
+                         updateProgressBar(100);
+                         for(var k in what) {
+                             var kk = '#'+k; 
+                             console.log(k);
+                             console.log(what[k]);
+                             if (k.includes("slot"))
+                             {   
+                                 if (what[k] > 0)
+                                 {
+                                    $(kk).removeClass('nw');
+                                    $(kk).addClass('wo');
+                                 }
+                                 else 
+                                 {
+                                    $(kk).removeClass('wo');
+                                    $(kk).addClass('nw');
+                                 }
+                             } 
+                             else
+                             {
+                                 $(kk).text(what[k]);
+                             }
+                         }
+                       },
+                 });
 
-                   // When the JSON data from the handle-upload.php
-                   // is received, it's in the map of userscore 
-                   for(var k in userscore) {
+                 poll = setInterval(function () {
+                     pollForProgress(identifier, fileField['name']);
+                 }, 500);
 
-                       // We're going to modify objects in the page, by ID
-                       // The keys of each element in the map is named
-                       // to match the ID names of the web content entities.
-                       var kk = '#'+k; 
-
-                       // Logging for debugging
-                       // console.log(k);
-                       // console.log(userscore[k]);
-
-                       // Each of the members that deal with the Red/Green
-                       // checkboxes are named slot_#X
-                       if (k.includes("slot"))
-                       {   
-                           // severely pedantic...  They worked this combo
-                           if (userscore[k] == 'X') 
-                           {
-                              // If the page was not reloaded, then clear
-                              // and reset
-                              $(kk).removeClass('nw');
-                              $(kk).addClass('wo');
-                           }
-                           else 
-                           {
-                              // If the page was not reloaded, then clear
-                              // and reset
-                              $(kk).removeClass('wo');
-                              $(kk).addClass('nw');
-                           }
-                       } 
-                       else
-                       {
-                           // All (nearly) of the other elements are
-                           // text fields that are updated in this page.
-                           $(kk).text(userscore[k]);
-                       }
-                   }
-                 },
-            });
-
-            poll = setInterval(function () {
-                 pollForProgress(identifier, fileField['name']);
-            }, 500);
-
-            // jdw -- deciding to not reset the form.  the trouble
-            // with resetting the form is if the user picks a continent
-            // not default, when they Upload the UI snaps the radio button
-            // selected to the default.
-            // uploadForm.reset();
-
-            generateUploadIdentifier();
+                 // uploadForm.reset();
+                 generateUploadIdentifier();
 		        
-            }
-            else
-            {
-                alert('You should choose a file.')
-            }
-          });
+             } else {
+                 alert('You should choose a file.')
+             }
+         });
      });
 
-     function pollForProgress(id, fieldName)
-     {
-        $.getJSON('check-progress.php?identifier=' 
-                   + id 
-                   + '&fieldName=' 
-                   + fieldName, function(data) {
-                       if (data !== null) 
-                       {
-                         const percentage = 
-                         (data.bytes_uploaded / data.bytes_total) * 100;
-                         if (percentage > $('#fileUploadProgress').attr('aria-valuenow')) 
-                         {
-                            updateProgressBar(percentage);
-                         }
+     function pollForProgress(id, fieldName) {
+         $.getJSON('check-progress.php?identifier=' + id + '&fieldName=' + fieldName, function(data) {
+             if (data !== null) {
+                 const percentage = (data.bytes_uploaded / data.bytes_total) * 100;
+                 if (percentage > $('#fileUploadProgress').attr('aria-valuenow')) {
+                     updateProgressBar(percentage);
+                 }
 
-                         if (data.detectedMimeType && $('#mediaType').hasClass('d-none'))
-                         {
-                            const fileType = parseFileType(data.detectedMimeType.split('/'));
+                 if (data.detectedMimeType && $('#mediaType').hasClass('d-none')) {
+                     const fileType = parseFileType(data.detectedMimeType.split('/'));
 
-                            if (fileType)
-                            {
-                               $('#mediaThing').text(fileType.thingText);
-                               $('#mediaIcon').addClass('fa ' + fileType.fileIcon);
-                               $('#mediaType').removeClass('d-none');
-                            }
-                         }
-                         $('#progressDetails pre').text(JSON.stringify(data, null, 2));
-                         $('#progressDetails').removeClass('d-none');
-                       }
-                });
+                     if (fileType) {
+                         $('#mediaThing').text(fileType.thingText);
+                         $('#mediaIcon').addClass('fa ' + fileType.fileIcon);
+                         $('#mediaType').removeClass('d-none');
+                     }
+                 }
+
+                 $('#progressDetails pre').text(JSON.stringify(data, null, 2));
+                 $('#progressDetails').removeClass('d-none');
+             }
+         });
      }
 
-     function generateUploadIdentifier()
-     {
+     function generateUploadIdentifier() {
          $('#uploadprogressIdentifier').val(
              Math.random().toString(36).replace('0.', '')
          );
      }
 
-     function updateProgressBar(percentage)
-     {
+     function updateProgressBar(percentage) {
          $('#fileUploadProgress')
              .css('width', percentage + '%')
              .attr('aria-valuenow', Math.round(percentage))
              .text(Math.round(percentage) + '%');
      }
 
-     function sleep(ms)
-     {
+     function sleep(ms) {
          return new Promise(resolve => setTimeout(resolve, ms));
      }
 
-     function parseFileType(fileType)
-     {
+     function parseFileType(fileType) {
          const type = fileType[0];
          const specifier = fileType[1];
          let fileIcon = '';
@@ -316,6 +278,7 @@ EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
 
          fileIcon = 'fa-file-o';
          thingText = 'an example file for ' + specifier;
+
          return {
              fileIcon: fileIcon,
              thingText: thingText
@@ -323,50 +286,66 @@ EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
      }
  </script>
 
+<div id="report-panel">
+<b style="font-size:12px;">Report</b><br>
+<pre>
+<div style="font-size:12pt;" id="report"></div>
+</pre>
+<p>
+
+<b style="font-size:12px;">Solution</b><br>
+<textarea width=50 height=10 id="satisfied">
+</textarea>
+<!-- <pre>
+<div style="font-size:12px;" id="satisfied"></div><p>
+</pre>
+-->
+<p>
+
 <b style="font-size:12px;">Needed</b><br>
 <pre>
-<div style="font-size:12px;" id="needed">TBD</div><p>
+<div style="font-size:12px;" id="needed">/div><p>
 </pre>
-<br>
-<b style="font-size:12px;">Solution</b><br>
-<pre>
-<div style="font-size:12px;" id="satisfied">TBD</div><p>
-</pre>
+<p>
+</div>
+
 </td>
-<!-- second column of display is the matrix chart -->
 <td style="vertical-align:top;">
-   <div class="container my-5">
-   <table>
-     <tr>
-       <td class="hcon hcd" colspan=11>QTH:
-         <div class="hcd"  id="mycont"></div>
-       </td>
-     </tr>
-     <tr>
-       <td class="nwk nwkd nwkl" colspan=3>Worked:</td>
-       <td class="nwk nwkd" colspan=2>
-          <div style="nwkd" id="worked-count"></div>
-       </td>
-       <td class="nwk nwkd" colspan=4>Unworked:</td>
-       <td class="nwk nwkd nwkr" colspan=2>
-          <div class="nwkd" id="unworked-count"></div>
-       </td>
-     </tr>
-     <tr>
-       <th class="lnw" ></th>
-       <th class="lnw">0</th>
-       <th class="lnw">1</th>
-       <th class="lnw">2</th>
-       <th class="lnw">3</th>
-       <th class="lnw">4</th>
-       <th class="lnw">5</th>
-       <th class="lnw">6</th>
-       <th class="lnw">7</th>
-       <th class="lnw">8</th>
-       <th class="lnw">9</th>
-     </tr>
-<!-- what follows are each row of the matrix, per letter A-Z -->
-     <tr>
+ <div class="container my-5">
+<table>
+<tr>
+<th class="hcon hcd" colspan=11>QTH:
+<span class="hcd"  id="mycont"></span></th>
+</tr>
+
+<!--
+<tr>
+<td class="nwk nwkd nwkl" colspan=3>Worked:</td>
+<td class="nwk nwkd" colspan=2>
+<div style="nwkd" id="worked-count"></div>
+</td>
+<td class="nwk nwkd" colspan=4>Unworked:</td>
+<td class="nwk nwkd nwkr" colspan=2>
+<div class="nwkd" id="unworked-count"></div>
+</td>
+</tr>
+-->
+
+<tr>
+<th class="lnw" ></th>
+<th class="lnw">0</th>
+<th class="lnw">1</th>
+<th class="lnw">2</th>
+<th class="lnw">3</th>
+<th class="lnw">4</th>
+<th class="lnw">5</th>
+<th class="lnw">6</th>
+<th class="lnw">7</th>
+<th class="lnw">8</th>
+<th class="lnw">9</th>
+</tr>
+
+<tr>
 <td class="lnw">A</td>
 <td class="ncl"><div id="slot_0A"></div></td>
 <td class="ncl"><div id="slot_1A"></div></td>
@@ -730,13 +709,13 @@ EU-AS <input type='radio' name='mycont' value='EU-AS'> <p>
 <td class="ncl"><div id="slot_9Z"></div></td>
 </tr>
 
-<!-- matrix table ends -->
+<!-- table ends -->
 </table>
+
+
 </div>
-<!-- second column ends -->
 </td>
 </tr>
-<!-- outer most table holding the two display columns -->
 </table>
 </body>
 </html>

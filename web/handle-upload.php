@@ -406,7 +406,7 @@ function dx2cont($dxid)
     case 132: return "SA";
     case 462: return "AF";
     case 201: return "AF";
-    default: return "UN";
+    default: return "Unknown Continent";
     }
 }
 
@@ -427,7 +427,7 @@ foreach ($letar as $let)
   foreach ($numar as $num)
   {
      $sk = "slot_" . "$num" . "$let";
-     $naany[$sk] = '0'; // we haven't worked this combo, yet.
+     $naany[$sk] = 0; // we haven't worked this combo, yet.
   }
 }
 
@@ -455,96 +455,134 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
     // Open the file uploaded, and begin parsing.
     $fileHandle = fopen($_FILES['uploadprogressFile']['tmp_name'], 'r');
 
-    // Line by line, read from the QSO ADIF Log
+    $seenEOH = 0;
+    $seenEOR = 0;
+    $seendate = 0;
+    $seendxcc = 0;
+    $seencall = 0;
+    $seenband = 0;
     while (($x = fgets($fileHandle)) !== false) 
     {
-      // ADIF log files are ONE LINE per QSO.
-      // ALL QSO on each line have a Band marker.  We don't
-      // care what the band is, but we know a line with 'Band'
-      // is a line with a potential QSO to investigate.
-      if ( preg_match('/^<BAND/i', $x, $matches))
+      if (!$seenEOH && preg_match('/<EOH>/i', $x, $matches))
       {
-      
-      // ADIF puts the QSO_DATE field.  It's going to be YYYYMMDD
-      // format. So we only care about the first four digits YYYY
-      if ( preg_match("/<QSO_DATE:\d+>${curYear}.*/i", $x, $matches))
+         $seenEOH = 1;
+         continue;
+      } 
+
+      if (preg_match("/<QSO_DATE:\d+(:\w+)?>${curYear}/i", $x, $matches))
       {
+          $seendate = 1;
+      }
 
-      // Here we find the DXCC ID of the Log entry.
-      // We cannot depend on the CONT field, but we can depend
-      // on the DXCC field... so we grab the value. (captured)
-      if (preg_match('/<DXCC:\d+>(\d+).*/i', $x, $matches))
-      {
-          // The candidate DXCC ID of this Log entry
-          $thiscont = dx2cont($matches[1]);
+          // Here we find the DXCC ID of the Log entry.
+          // We cannot depend on the CONT field, but we can depend
+          // on the DXCC field... so we grab the value. (captured)
+          if (!$seendxcc && preg_match('/.*<DXCC:\d+>(\d+).*/i', $x, $matches))
+          {
+              // The candidate DXCC ID of this Log entry
+              $thiscont = dx2cont($matches[1]);
+              // If the continent of this entry is the same as the user
+              // we skip it.
+              if ( strcmp($thiscont,$naany['mycont']) != 0)
+              {
 
-       // If the continent of this entry is the same as the user
-       // we skip it.
-       if ( strcmp($thiscont,$naany['mycont']) != 0) 
-       {
+                  $seendxcc = 1;
+              }
+          }
+                 
+          // At this point we have a QSO with a station in the current
+          // year and NOT in their continent.. so let's keep parsing
 
-       // At this point we have a QSO with a station in the current
-       // year and NOT in their continent.. so let's keep parsing
-
-       // Candidate NAANY entity.. so let's figure out the magic...
-       // We want the call sign of the contact
-       if (preg_match('/<CALL:\d+>([^\s]+).*/i', $x, $matches))
-       {
-           $call = strtoupper($matches[1]);
-           // Unlikely to fail but we want to make sure we have 
-           // the first DIGIT LETTER match found.
-           if (preg_match('/(\d)([A-Z])/i', $call, $matches)) 
+          // Candidate NAANY entity.. so let's figure out the magic...
+          // We want the call sign of the contact
+          if (!$seencall && preg_match('/.*<CALL:\d+>([^\s]+).*/i', $x, $matches))
+          {
+               $call = strtoupper($matches[1]);
+               // Unlikely to fail but we want to make sure we have 
+               // the first DIGIT LETTER match found.
+               $nummatches = preg_match_all('/(\d[A-Z])/i', $call, $naany_matches);
+               if ($nummatches > 0) {
+                 $candidate_call = end($naany_matches);
+                 $candidate_call = end($candidate_call);
+                 preg_match('/(\d)([A-Z])/i', $candidate_call, $matches);
+               
+                 $lastnum = $matches[1];
+                 $lastlet = $matches[2];
+                 // The key to the map is the ID of the table
+                 // cell that corresponds to the DIGIT LETTER
+                 $seencall = 1;
+               } 
+           }
+           if (!$seenband && preg_match('/<BAND:\d+>(\d+m)\s/i', $x, $matches))
            {
-               $num = $matches[1];
-               $let = $matches[2];
-               // The key to the map is the ID of the table
-               // cell that corresponds to the DIGIT LETTER
-               $sk = "slot_" . "$num" . "$let";
-               if (strcmp($naany[$sk],"0") == 0)
-               {
-                   $sk = "slot_" . "$num" . "$let";
-                   $naany[$sk] = "X";
-                   $naanies++;
-                   $satisfied .= "$call satisfied $num$let\n";
-                   // break out and go back to top of loop to
-                   // examine next QSO in log.
-                   continue;
-               } // notworked
-           } // got call
-        } // has call
-      } // my cont
-      } // dxcc
-      } // date
-      } // band
-    } // while reading lines
+               $band=$matches[1];
 
+
+               $seenband = 1;
+           }
+
+           if (!$seenEOR && preg_match('/<EOR>/i', $x, $matches)) 
+           {
+               $seenEOR = 1;
+           }
+
+           if ($seenEOR)
+           {
+              if ($seendate && $seendxcc && $seencall && $seenband)
+              {
+                  $sk = "slot_" . "$lastnum" . "$lastlet";
+                  if (isset($naany[$sk])) {
+                     $naany[$sk]++;
+                  } else {
+                     $naany[$sk] = 1;
+                  }
+                  $satisfied .= "$call satisfied $lastnum$lastlet\n";
+
+                     if (isset($byband[$band]))  {
+                        $byband[$band]++;
+                     }
+                     else {
+                        $byband[$band] = 1;
+                     }
+
+                     if (isset($bycont[$thiscont])) {
+                        $bycont[$thiscont]++;
+                     }
+                     else {
+                        $bycont[$thiscont] = 1;
+                     }
+               }
+               $seendate = 0;
+               $seendxcc = 0;
+               $seencall = 0;
+               $seenband = 0;
+               $seenEOR = 0;
+               $thiscont = '';
+               $band = '';
+               continue;
+           }
+           else 
+           {
+               // have not yet seen EOR. so keep looking
+               $naany["record-ended-but-no-valid-qso"] = 1;
+           }
+    }
     // Done with the file so far...
     fclose($fileHandle);
-
-    // There are only 260 possible (26 letters x 10 call areas)
-    $unworked = 260 - $naanies;
-    $naany['worked-count'] = "$naanies";
-    $naany['unworked-count'] = "$unworked";
-     
 
     // Scratch pad for the generation of the JSON data for "needed" combos
     $need = '';
 
-    if ($naanies == 260)
+    $pretty_print_needcount = 0;
+    $multi = 1;
+    foreach ($letar as $let)
     {
-        // The need nothing. They worked them all.
-        $need = 'None!';
-    } 
-    else
-    {
-        $pretty_print_needcount = 0;
-        foreach ($letar as $let)
+        foreach ($numar as $num)
         {
-            foreach ($numar as $num)
-            {
                $sk = "slot_" . "$num" . "$let";
-               if (strcmp($naany[$sk],"0") == 0) 
+               if ($naany[$sk] == 0) 
                {
+                   $multi = 0;
                    $need .= "$num" . "$let" . " ";
                    $pretty_print_needcount++;
                    // Print 16 combo's per line
@@ -552,13 +590,82 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
                         $need .= "\n";
                    }
                }
-            }
+               else
+               {
+                   $naanies++;
+               }
         }
+    }
+
+
+    $naanydegree = 0;
+    $multicount = 0;
+    if ($multi > 0)
+    {
+        do
+        {
+            $multicount = 0; 
+            foreach ($letar as $let)
+            {
+               foreach ($numar as $num)
+               {
+                   $sk = "slot_" . "$num" . "$let";
+                   if ($naany[$sk] > (1+$naanydegree))
+                   {
+                       $multicount++;
+                   }
+               }
+            }
+            if ($multicount == 260) {
+              $naanydegree++;
+            }
+        } while($multicount == 260);
     }
 
     $naany['needed'] = "$need";
     $naany['satisfied'] = $satisfied;
-    $naany['naanies'] = "$naanies";
+
+    $bandcount = 0;
+    $contcount = 0;
+    $bandreport = "";
+    foreach($byband as $bkey => $bvalue)
+    {
+             $bandcount++;
+             // $bandreport_suffix = ($bvalue > 1)?"s":"";
+             $bandreport .= "$bkey\n"; 
+             //  worked $bvalue time$bandreport_suffix\n";
+    }
+
+    $contreport = "";
+    foreach($bycont as $ckey => $cvalue)
+    {
+             $contcount++;
+			 // $contreport_suffix = ($cvalue > 1)?"s":"";
+             $contreport .= "$ckey\n"; 
+             // worked $cvalue time$contreport_suffix\n";
+    }
+
+    $effectivenaanies = $naanies;
+    if ($naanydegree > 0)
+    {
+       $effectivenaanies = 260 * (1+$naanydegree) + $multicount;
+    }
+    $naany['report'] = "You worked a total of $effectivenaanies NAANY contacts.\n" ;
+    if ($naanydegree > 0) {
+        $naanydegree++;
+        $naany['report'] .= "BONUS: You worked a total of $naanydegree MULTI NAANY multiples.\n";
+    } 
+    $bandcount_suffix = ($bandcount > 1)?"s":"";
+    $contcount_suffix = ($contcount > 1)?"s":"";
+    $naany['report'] .= 
+"You worked them across $bandcount band$bandcount_suffix and $contcount continent${contcount_suffix}.\n" .
+                       "Band report:\n" .
+                       $bandreport . "\n" .
+                       "Continent report:\n" .
+                       $contreport . "\n";
+
+    
+
 } // checking if a file
 
 // All data that is consumed by the AJAX async callback is now
