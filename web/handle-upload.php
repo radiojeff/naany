@@ -7,6 +7,7 @@
 // If the request is not a POST, tell the client the method is not allowed. This
 // is not required to use the uploadprogress extension. It is only here for the
 // sake of example.
+
 if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
     header('HTTP/1.1 405 Method Not Allowed');
     exit;
@@ -14,6 +15,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
 
 // If there are no files in the request, tell the client it made a bad request.
 // Again, this is not required to use uploadprogress. It is used as an example.
+
 if (count($_FILES) === 0) {
     header('HTTP/1.1 400 Bad Request');
     exit;
@@ -30,7 +32,7 @@ if (count($_FILES) === 0) {
 //
 // This is going to get called by the parent AJAX async callback
 // mechanism.
-
+//
 // Communication between this script and the parent
 // that initiates the AJAX callback needs this PHP script
 // and the essential message (aside from the data of course)
@@ -394,7 +396,6 @@ function dx2cont($dxid)
 }
 
 
-
 $fileHandle = 0;
 $naanies = 0;
 $x = '';
@@ -403,8 +404,7 @@ $x = '';
 $letar = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 $numar = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
-// It's slightly easier if we just fill the matrix with not-worked
-// flags.
+// It's slightly easier if we just fill the matrix with not-worked flags.
 foreach ($letar as $let)
 {
   foreach ($numar as $num)
@@ -433,9 +433,6 @@ header('Content-Type: application/json');
 
 if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name'])) 
 {
-    // This works only on the contacts in the Log for the current year.
-    // Whatever that year is, we only care about the current year.
-    //$curYear = date('Y');
     $curYear = $naany['theyear'];
     if ($curYear < 0) {
        $curYear = date('Y');
@@ -445,12 +442,14 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
     // Open the file uploaded, and begin parsing.
     $fileHandle = fopen($_FILES['uploadprogressFile']['tmp_name'], 'r');
 
+    // Flags...
     $seenEOH = 0;
     $seenEOR = 0;
     $seendate = 0;
     $seendxcc = 0;
     $seencall = 0;
     $seenband = 0;
+
     while (($x = fgets($fileHandle)) !== false) 
     {
       if (!$seenEOH && preg_match('/<EOH>/i', $x, $matches))
@@ -464,114 +463,108 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
           $seendate = 1;
       }
 
-          // Here we find the DXCC ID of the Log entry.
-          // We cannot depend on the CONT field, but we can depend
-          // on the DXCC field... so we grab the value. (captured)
-          if (!$seendxcc && preg_match('/.*<DXCC:\d+>(\d+).*/i', $x, $matches))
-          {
-              // The candidate DXCC ID of this Log entry
-              $thiscont = dx2cont($matches[1]);
-          }
-          elseif (!$seendxcc && preg_match('/.*<DXCC:\d+\:N>(\d+).*/i', $x, $matches))
-          {
-              // The candidate DXCC ID of this Log entry
-              $thiscont = dx2cont($matches[1]);
-          }
-          else {
-              $thiscont = '';
-          }
+      // Here we find the DXCC ID of the Log entry.
+      // We cannot depend on the CONT field, but we can depend
+      // on the DXCC field... so we grab the value. (captured)
+      if (!$seendxcc && preg_match('/.*<DXCC:\d+>(\d+).*/i', $x, $matches))
+      {
+          // The candidate DXCC ID of this Log entry
+          $thiscont = dx2cont($matches[1]);
+      }
+      elseif (!$seendxcc && preg_match('/.*<DXCC:\d+\:N>(\d+).*/i', $x, $matches))
+      {
+          // The candidate DXCC ID of this Log entry
+          $thiscont = dx2cont($matches[1]);
+      }
+      else {
+          $thiscont = '';
+      }
 
-          if ($thiscont && !$seendxcc)
-          {
-             // If the continent of this entry is the same as the user
-             // we skip it.
-             if ( strcmp($thiscont,$naany['mycont']) != 0)
-             {
-                 $seendxcc = 1;
+      if ($thiscont && !$seendxcc)
+      {
+         // If the continent of this entry is the same as the user
+         // we skip it.
+         if ( strcmp($thiscont,$naany['mycont']) != 0)
+         {
+             $seendxcc = 1;
+         }
+      } 
+
+      // At this point we have a QSO with a station in the current
+      // year and NOT in their continent.. so let's keep parsing
+
+      // Candidate NAANY entity.. so let's figure out the magic...
+      // We want the call sign of the contact
+      if (!$seencall && preg_match('/.*<CALL:\d+>([^\s]+).*/i', $x, $matches))
+      {
+           $call = strtoupper($matches[1]);
+           // Unlikely to fail but we want to make sure we have 
+           // the first DIGIT LETTER match found.
+           $nummatches = preg_match_all('/(\d[A-Z])/i', $call, $naany_matches);
+           if ($nummatches > 0) {
+             $candidate_call = end($naany_matches);
+             $candidate_call = end($candidate_call);
+             preg_match('/(\d)([A-Z])/i', $candidate_call, $matches);
+           
+             $lastnum = $matches[1];
+             $lastlet = $matches[2];
+             // The key to the map is the ID of the table
+             // cell that corresponds to the DIGIT LETTER
+             $seencall = 1;
+           } 
+      }
+      if (!$seenband && preg_match('/<BAND:\d+>(\d+m)\s/i', $x, $matches))
+      {
+          $band=$matches[1];
+          $seenband = 1;
+      }
+
+      if (!$seenEOR && preg_match('/<EOR>/i', $x, $matches)) 
+      {
+          $seenEOR = 1;
+      }
+
+      if ($seenEOR)
+      {
+         if ($seendate && $seendxcc && $seencall && $seenband)
+         {
+             $sk = "slot_" . "$lastnum" . "$lastlet";
+             if (isset($naany[$sk])) {
+                $naany[$sk]++;
+             } else {
+                $naany[$sk] = 1;
              }
-          } 
-          //else
-          //{
-          //   $naany['record-bad-cont'] =  $x;
-          //   $thiscont = 'Unknown';
-          //   $seendxcc = 1;
-          //}
-                       
+              
+             $satisfied .= "$lastnum$lastlet, $call, $band, $thiscont\n";
+                if (isset($byband[$band]))  {
+                   $byband[$band]++;
+                }
+                else {
+                   $byband[$band] = 1;
+                }
 
-          // At this point we have a QSO with a station in the current
-          // year and NOT in their continent.. so let's keep parsing
+                if (isset($bycont[$thiscont])) {
+                   $bycont[$thiscont]++;
+                }
+                else {
+                   $bycont[$thiscont] = 1;
+                }
+          }
+          $seendate = 0;
+          $seendxcc = 0;
+          $seencall = 0;
+          $seenband = 0;
+          $seenEOR = 0;
+          $thiscont = '';
+          $band = '';
 
-          // Candidate NAANY entity.. so let's figure out the magic...
-          // We want the call sign of the contact
-          if (!$seencall && preg_match('/.*<CALL:\d+>([^\s]+).*/i', $x, $matches))
-          {
-               $call = strtoupper($matches[1]);
-               // Unlikely to fail but we want to make sure we have 
-               // the first DIGIT LETTER match found.
-               $nummatches = preg_match_all('/(\d[A-Z])/i', $call, $naany_matches);
-               if ($nummatches > 0) {
-                 $candidate_call = end($naany_matches);
-                 $candidate_call = end($candidate_call);
-                 preg_match('/(\d)([A-Z])/i', $candidate_call, $matches);
-               
-                 $lastnum = $matches[1];
-                 $lastlet = $matches[2];
-                 // The key to the map is the ID of the table
-                 // cell that corresponds to the DIGIT LETTER
-                 $seencall = 1;
-               } 
-           }
-           if (!$seenband && preg_match('/<BAND:\d+>(\d+m)\s/i', $x, $matches))
-           {
-               $band=$matches[1];
-               $seenband = 1;
-           }
-
-           if (!$seenEOR && preg_match('/<EOR>/i', $x, $matches)) 
-           {
-               $seenEOR = 1;
-           }
-
-           if ($seenEOR)
-           {
-              if ($seendate && $seendxcc && $seencall && $seenband)
-              {
-                  $sk = "slot_" . "$lastnum" . "$lastlet";
-                  if (isset($naany[$sk])) {
-                     $naany[$sk]++;
-                  } else {
-                     $naany[$sk] = 1;
-                  }
-                  
-                  $satisfied .= "$lastnum$lastlet, $call, $band, $thiscont\n";
-                     if (isset($byband[$band]))  {
-                        $byband[$band]++;
-                     }
-                     else {
-                        $byband[$band] = 1;
-                     }
-
-                     if (isset($bycont[$thiscont])) {
-                        $bycont[$thiscont]++;
-                     }
-                     else {
-                        $bycont[$thiscont] = 1;
-                     }
-               }
-               $seendate = 0;
-               $seendxcc = 0;
-               $seencall = 0;
-               $seenband = 0;
-               $seenEOR = 0;
-               $thiscont = '';
-               $band = '';
-               continue;
-           }
-           else 
-           {
-               // have not yet seen EOR. so keep looking
-               $naany["record-ended-but-no-valid-qso"] = 1;
-           }
+          continue;
+      }
+      else 
+      {
+           // have not yet seen EOR. so keep looking
+           $naany["record-ended-but-no-valid-qso"] = 1;
+      }
     }
     // Done with the file so far...
     fclose($fileHandle);
@@ -580,7 +573,6 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
     $need = '';
 
     $pretty_print_needcount = 0;
-    //multi  $multi = 1;
     foreach ($letar as $let)
     {
         foreach ($numar as $num)
@@ -588,9 +580,9 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
                $sk = "slot_" . "$num" . "$let";
                if ($naany[$sk] == 0) 
                {
-                   //multi $multi = 0;
                    $need .= "$num" . "$let" . " ";
                    $pretty_print_needcount++;
+
                    // Print 16 combo's per line
                    if ($pretty_print_needcount % 16 == 0) {
                         $need .= "\n";
@@ -603,37 +595,13 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
         }
     }
 
-
-// multi     $naanydegree = 0;
-// multi     $multicount = 0;
-// multi     if ($multi > 0)
-// multi     {
-// multi         do
-// multi         {
-// multi             $multicount = 0; 
-// multi             foreach ($letar as $let)
-// multi             {
-// multi                foreach ($numar as $num)
-// multi                {
-// multi                    $sk = "slot_" . "$num" . "$let";
-// multi                    if ($naany[$sk] > (1+$naanydegree))
-// multi                    {
-// multi                        $multicount++;
-// multi                    }
-// multi                }
-// multi             }
-// multi             if ($multicount == 260) {
-// multi               $naanydegree++;
-// multi             }
-// multi         } while($multicount == 260);
-// multi     }
-
     $naany['needed'] = "$need";
     $naany['satisfied'] = $satisfied;
 
     $bandcount = 0;
     $contcount = 0;
     $bandreport = "";
+
     foreach($byband as $bkey => $bvalue)
     {
              $bandcount++;
@@ -651,25 +619,16 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
 
     $effectivenaanies = $naanies;
 
-//    if ($naanydegree > 0)
-//    {
-//       $effectivenaanies = 260 * (1+$naanydegree) + $multicount;
-//    }
     $naany['report'] = "You worked a total of $effectivenaanies NAANY contacts.\n" ;
-//    if ($naanydegree > 0) {
-//        $naanydegree++;
-//        $naany['report'] .= "BONUS: You worked a total of $naanydegree MULTI NAANY multiples.\n";
-//    } 
     $bandcount_suffix = ($bandcount > 1)?"s":"";
     $contcount_suffix = ($contcount > 1)?"s":"";
-    $naany['report'] .= 
-"You worked them across $bandcount band$bandcount_suffix and $contcount continent${contcount_suffix}.\n";
+    $naany['report'] .= "You worked them across $bandcount band$bandcount_suffix and $contcount continent${contcount_suffix}.\n";
 
-//                   "Band report:\n" .
-//                   $bandreport . "\n" .
-//                   "Continent report:\n" .
-//                   $contreport . "\n";
 }
+
+// At this point we are done, so send the entire mess (JSON) back to the Javascript
+// handling the result to populate the web page.
+
 // All data that is consumed by the AJAX async callback is now
 // sent back to the caller.... Enjoy.
 echo json_encode($naany);

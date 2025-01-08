@@ -214,8 +214,8 @@ BODY {
                            updateProgressBar(100);
                            for(var k in what) {
                                var kk = '#'+k; 
-                               console.log(k);
-                               console.log(what[k]);
+                               // uncomment for debugging only // console.log(k);
+                               // uncomment for debugging only // console.log(what[k]);
                                if (k.includes("slot")) {   
                                    if (what[k] > 0) {
                                       $(kk).removeClass('nw');
@@ -237,7 +237,9 @@ BODY {
                        pollForProgress(identifier, fileField['name']);
                    }, 500);
   
+                   // don't reset the form
                    // uploadForm.reset();
+
                    generateUploadIdentifier();
                } else {
                    alert('You should choose a file.')
@@ -701,7 +703,6 @@ BODY {
       <td class="ncl"><div id="slot_8Z"></div></td>
       <td class="ncl"><div id="slot_9Z"></div></td>
       </tr>
-      
       </table>
     </div>
     </td>
