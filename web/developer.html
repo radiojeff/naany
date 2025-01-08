@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" 
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" 
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <title>Developer Notes for WWDXC NAANY Award Calculator</title>
+
+        <style>
+BODY { 
+   margin-left: 20px;
+   margin-top: 20px;
+   font-family: 'Roboto Mono';
+}
+</style>
+</head>
+<body style= "width=1600px;font-size:12px;font-family:'Roboto Mono';">
+  <div style="max-width:640px;">
+  <b>Notes:</b><br>
+  The required fields for this tool per ADIF file are listed below.
+  <ul>
+   <li>EOH - The header of the ADIF is separated from the records. The
+  software doesn't technically need this record, but it is by default part
+ of all ADIF files, so the software relies on finding this token before 
+evaluating any QSO record.</li>
+   <li>QSO_DATE - Required, obviously to check the date of each QSO record
+against the specified year you entered for the NAANY award calculation.</li>
+   <li>DXCC - Required. The logging software must insert a field for the <b>numeric</b>
+identity of the DXCC entity.  Most logging programs do this.  Without the DXCC
+numeric valie per record, the software cannot feasibly reverse lookup
+the CALL to determnine the continent.  It could use the CALL field, but
+that would make the tool extremely slow and unreliable since not all call signs are in databases.   Check your logging/conversion to ensure DXCC is present in each record.</li>
+   <li>CALL - Required to figure out if the contact has the properties for NAANY entries.</li>
+   <li> BAND - Required.  Technically the band has no influence on the
+NAANY calculation, but this software requires it.</li>
+   <li> EOR - End of Record field.  Required.  All ADIF records must have it. All Records are terminated with this field.  There is one EOR field per QSO record.
+ </ul>
+<p>
+If your log is still generating zero results, then please send me the first 20 lines
+of your ADIF file.  20 complete lines from the top of the file.  I'll debug it after you
+send that sample.
+<p>
+ADIF is a peculiar format and sometimes the parsing routines get it wrong.  Your sample
+can help me correct the bugs.
+ </div>
+<hr>
+<span style="font-family:Times-Roman;">&copy; Jeff Wandling, W7BRS</span>
+</body>
+</html>

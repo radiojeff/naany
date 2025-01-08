@@ -2,19 +2,30 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <meta name="viewport" 
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <link rel="stylesheet" 
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <title>WWDXC NAANY Award Calculator</title>
-<style>
+
+        <style>
+.resizedTextbox {width: 60px; height: 24px; padding: 1px} 
+input:valid {
+  color: green;
+}
+input:invalid {
+  color: red;
+}
 textarea, input, button, select { font-family: inherit; font-size: inherit; }
 textarea {
-  width: 4in;
-  height: 2in;
+  width: 4in; height: 2in;
 }
 tbody tr:nth-child(odd) { background: #EEE; }
 tbody tr:td.nth-child(even) { background: #DDD; }
@@ -25,8 +36,7 @@ tbody tr:td.nth-child(even) { background: #DDD; }
    border-right: 1px solid black; 
 }
 .hcd {
-   font-weight:bold;
-   font-size:12px;
+   font-weight:bold; font-size:12px;
 }
 
 .nwk {
@@ -40,8 +50,7 @@ tbody tr:td.nth-child(even) { background: #DDD; }
    border-right: 1px solid black; 
 }
 .nwkd {
-   font-weight:bold;
-   font-size:12px;
+   font-weight:bold; font-size:12px;
 }
 
 .ncl {
@@ -49,673 +58,657 @@ tbody tr:td.nth-child(even) { background: #DDD; }
   border-right: 1px solid black; 
   border-left: 1px solid black; 
   border-top: 1px solid black;
-    border-spacing: 0;
-    border-collapse: collapse;
-   padding:0;
-  width:18px;height:14px;background-repeat:no-repeat;
+  border-spacing: 0; border-collapse: collapse;
+  padding:0; width:18px; height:13px;
+  background-repeat:no-repeat;
 }
 .wo  {
-   width:18px;height:14px;
-    border-spacing: 0;
-    border-collapse: collapse;
-   padding:0;
-   background: #DDD;
-   background:url(/naany/bw.png);
+   width:18px;height:13px; border-spacing: 0;
+   border-collapse: collapse; padding:0;
+   background: #DDD; background:url(/naany/bw.png);
 }
 .nw  {
-    border-spacing: 0;
-    border-collapse: collapse;
-   padding:0;
-   width:18px;height:14px;
-   background: #EEE;
+   border-spacing: 0; border-collapse: collapse; padding:0;
+   width:18px;height:13px; background: #EEE;
    background:url(/naany/bnw.png);
 }
 .lnw  {
 text-align: center;
-    vertical-align: middle;
-   width:17px;height:13px;
-   font-size:12px;
-  background: #CCC;
+   vertical-align: middle; width:17px;height:13px; font-size:12px;
+   background: #CCC;
 }
 BODY { 
-  font-family: 'Roboto Mono';
+   margin-left: 20px;
+   margin-top: 20px;
+   font-family: 'Roboto Mono';
 }
 </style>
+</head>
 
-    </head>
 <body style= "width=1600px;font-size:12px;font-family:'Roboto Mono';'>
-        <div class="container my-5">
 
-<table>
-<tr>
-<td style="vertical-align:top;">
-<h3>WWDXC NAANY Award Calculator</h3>
+<div class="container my-5">
+  <table>
+  <tr>
+  <td style="vertical-align:top;">
+  <h3>WWDXC NAANY Award Calculator</h3>
+  (Version 2.2)<br>
+  <br>
+  The <i>un-official</i> Western Washington DX Club NAANY Award calculator.<p>
+  <br>
+  Rules and Information go to:
+  <a href="https://www.wwdxc.org/awards/naany/">NAANY Rules</a><p>
+  Award Manager: Tom Sykes,
+   <a target="_top" href="https://www.qrz.com/db/NU7J">NU7J</a><br>
+  Award Creator: Jack Bock, K7ZR<br>
+  <br>
+  <b>Instructions:</b>
+  <ol>
+  <li>  Export your log to ADIF format.</li>
+  <li>  Enter the Year to check from your log.</li>
+  <li>  Pick which Continent you are in (Names from ARRL DXCC List)</li>
+  <li>  Use the form to load the file and then press Upload.</li>
+  <li>  Please <b>wait</b> for it to finish.</li>
+  <li>  If necessary, read <a target="_top" href="developer.html">Troubleshooting - Developer Notes</a> if there are issues.
+  </ol>
+  <br>
+  After the processing is done, the results and report will be at the bottom of this page. Scroll down if necessary.
+  <br>
+  <form id="uploadprogressForm">
+    <input id="uploadprogressIdentifier" 
+           type="hidden" 
+           name="UPLOAD_IDENTIFIER" value="">
 
-This is the un-official Western Washington DX Club NAANY Award calculator.
-<p>
- For Rules and Information go to:
- <a href="https://www.wwdxc.org/awards/naany/">NAANY Rules</a>
-<p>
- Award Creator: Jack Bock, K7ZR
-<p>
- WWDXC Un-offcial NAANY CALCULATOR By Jeff Wandling, W7BRS
-<br>
-<p>
-<b>Instructions:</b>
-<ol>
-<li>  Export your log to ADIF format.
-<li>  Pick which Continent you are in (Names from ARRL DXCC List)
-<li>  Use the form to load the file and then press Upload.
-<li>  Please wait for it to finish.
-</ol>
-</p> 
-     <form id="uploadprogressForm">
-         <input id="uploadprogressIdentifier" type="hidden" name="UPLOAD_IDENTIFIER" value="">
-         <div class="form-group">
-
-<b>You</b> are in which Continent?<br>
-NA <input type='radio' name='mycont' value='NA' checked>
-&nbsp;
-SA <input type='radio' name='mycont' value='SA'>
-&nbsp;
-EU <input type='radio' name='mycont' value='EU'>
-&nbsp;
-AF <input type='radio' name='mycont' value='AF'>
-&nbsp;
-AS <input type='radio' name='mycont' value='AS'>
-&nbsp;
-OC <input type='radio' name='mycont' value='OC'>
-&nbsp;
-AN <input type='radio' name='mycont' value='AN'>
-&nbsp;
-AS-AF <input type='radio' name='mycont' value='AS-AF'>
-&nbsp;
-EU-AS <input type='radio' name='mycont' value='EU-AS'>
-<p>
-<br>
-             <div class="custom-file">
-                 <input type="file" class="custom-file-input" name="uploadprogressFile" id="uploadprogressFile">
-                 <label class="custom-file-label" for="uploadprogressFile">Choose a file to upload</label>
-             </div>
-         </div>
-
-
-         <button id="uploadprogressSubmit" type="button" class="btn btn-primary">Upload ADIF File</button>
-     </form>
-     <div class="progress mt-5">
-         <div id="fileUploadProgress" class="progress-bar" role="progressbar" style="width: 0;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+  <div class="form-group">
+      <b>Which Year?</b>
+      <input type="text"  name="theyear" 
+             class="resizedTextbox"
+             maxlength="4"
+             id="theyear"
+             pattern="\d{4}"
+             required/>
+      (must enter 4 digit year, e.g., 2024)
+      <p>
+    
+      <b>You</b> are in which Continent?<br>
+      NA <input type='radio' name='mycont' value='NA' checked> &nbsp;
+      SA <input type='radio' name='mycont' value='SA'> &nbsp;
+      EU <input type='radio' name='mycont' value='EU'> &nbsp;
+      AF <input type='radio' name='mycont' value='AF'> &nbsp;<br>
+      AS <input type='radio' name='mycont' value='AS'> &nbsp;
+      OC <input type='radio' name='mycont' value='OC'> &nbsp;
+      AN <input type='radio' name='mycont' value='AN'> &nbsp;
+      AS-AF <input type='radio' name='mycont' value='AS-AF'> &nbsp;
+      EU-AS <input type='radio' name='mycont' value='EU-AS'>
+   
+     <br>
+     <div class="custom-file">
+        <input type="file" 
+               class="custom-file-input" 
+               name="uploadprogressFile"
+               id="uploadprogressFile">
+        <label class="custom-file-label" 
+               for="uploadprogressFile">Choose a file to upload</label>
      </div>
+  </div>
+  
+  <button 
+    id="uploadprogressSubmit" 
+    type="button" 
+    class="btn btn-primary">Upload ADIF File</button>
+  </form>
+  <div class="progress mt-5">
+    <div id="fileUploadProgress" 
+         class="progress-bar" 
+         role="progressbar" 
+         style="width: 0;" 
+         aria-valuenow="0" 
+         aria-valuemin="0" 
+         aria-valuemax="100">0%</div>
+  </div>
 
- </div> <!-- top div -->
+  <!-- </div> -->
 
- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+   <!-- top div -->
+  
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+   <script type="text/javascript">
+       let poll;
+       let identifier;
+  
+       $(document).ready(function() {
+        $('#report-panel').hide();
+         bsCustomFileInput.init();
+         generateUploadIdentifier();
+  
+         $('#uploadprogressSubmit').click(async function() {
+          const fileField = document.getElementById('uploadprogressFile')
+          const uploadForm = document.getElementById('uploadprogressForm');
+          const formData = new FormData(uploadForm);
+  
+         updateProgressBar(0);
+         $('#mediaType').addClass('d-none');
+         $('#mediaIcon').removeClass();
+         $('#progressDetails').addClass('d-none');
+  
+         // We do this so the user has time to see that the progress
+         // bar has reset to 0% and is starting to upload.
+         await sleep(500);
+         identifier = $('#uploadprogressIdentifier').val();
+         if (fileField.files.length > 0) {
+              $.ajax({
+                       url: 'handle-upload.php',
+                       data: formData,
+                       cache: false,
+                       contentType: false,
+                       processData: false,
+                       method: 'POST',
+                       dataType: 'json',
+                       success: function (what) {
+                           $('#report-panel').show();
+                           clearInterval(poll);
+                           updateProgressBar(100);
+                           for(var k in what) {
+                               var kk = '#'+k; 
+                               console.log(k);
+                               console.log(what[k]);
+                               if (k.includes("slot")) {   
+                                   if (what[k] > 0) {
+                                      $(kk).removeClass('nw');
+                                      $(kk).addClass('wo');
+                                   }
+                                   else {
+                                      $(kk).removeClass('wo');
+                                      $(kk).addClass('nw');
+                                   }
+                               } 
+                               else {
+                                   $(kk).text(what[k]);
+                               }
+                           }
+                         },
+                   });
+  
+                   poll = setInterval(function () {
+                       pollForProgress(identifier, fileField['name']);
+                   }, 500);
+  
+                   // uploadForm.reset();
+                   generateUploadIdentifier();
+               } else {
+                   alert('You should choose a file.')
+               }
+           });
+       });
+  
+       function pollForProgress(id, fieldName) {
+           $.getJSON('check-progress.php?identifier=' + id + '&fieldName=' + fieldName, function(data) {
+               if (data !== null) {
+                   const percentage = (data.bytes_uploaded / data.bytes_total) * 100;
+                   if (percentage > $('#fileUploadProgress').attr('aria-valuenow')) {
+                       updateProgressBar(percentage);
+                   }
+  
+                   if (data.detectedMimeType && $('#mediaType').hasClass('d-none')) {
+                       const fileType = parseFileType(data.detectedMimeType.split('/'));
+                       if (fileType) {
+                           $('#mediaThing').text(fileType.thingText);
+                           $('#mediaIcon').addClass('fa ' + fileType.fileIcon);
+                           $('#mediaType').removeClass('d-none');
+                       }
+                   }
+                   $('#progressDetails pre').text(JSON.stringify(data, null, 2));
+                   $('#progressDetails').removeClass('d-none');
+               }
+           });
+       }
+  
+       function generateUploadIdentifier() {
+           $('#uploadprogressIdentifier').val(
+               Math.random().toString(36).replace('0.', '')
+           );
+       }
+  
+       function updateProgressBar(percentage) {
+           $('#fileUploadProgress')
+               .css('width', percentage + '%')
+               .attr('aria-valuenow', Math.round(percentage))
+               .text(Math.round(percentage) + '%');
+       }
+       function sleep(ms) {
+           return new Promise(resolve => setTimeout(resolve, ms));
+       }
+       function parseFileType(fileType) {
+           const type = fileType[0];
+           const specifier = fileType[1];
+           let fileIcon = '';
+           let thingText = '';
+           fileIcon = 'fa-file-o';
+           thingText = 'an example file for ' + specifier;
+           return {
+               fileIcon: fileIcon,
+               thingText: thingText
+           };
+       }
+   </script>
+  
+  <div id="report-panel">
+    <b style="font-size:12px;">Report</b><br>
+    <div style="max-width:480px; font-size:12pt; font-family:monospace;" id="yeartested"></div>
+    <br>
+    <div style="max-width:480px; font-size:12pt; font-family:monospace;" id="report"></div>
+    
+    <br>
 
- <script type="text/javascript">
-     let poll;
-     let identifier;
+    <b style="font-size:12px;">Solution</b><br>
+    (copy CSV and paste to suit)<br>
+    <textarea width=50 height=10 id="satisfied">
+    </textarea>
+    <br><br>
+    <b style="font-size:12px;">Needed</b><br>
+    <div style="max-width:480px; font-size:12px; font-family:monospace;" id="needed"></div>
+  </div>
+  </td>
 
-     $(document).ready(function() {
-      $('#report-panel').hide();
-       bsCustomFileInput.init();
-       generateUploadIdentifier();
+  <!-- chart -->
+  <td style="vertical-align:top;">
+    <div id='graph-panel' class="container my-5">
+      <table summary="Tabular results of NAANY prefixes worked">
+      <tr>
+        <th class="hcon hcd" colspan=11>QTH:
+          <span class="hcd"  id="mycont"></span>
+        </th>
+      </tr>
 
-       $('#uploadprogressSubmit').click(async function() {
-        const fileField = document.getElementById('uploadprogressFile')
-        const uploadForm = document.getElementById('uploadprogressForm');
-        const formData = new FormData(uploadForm);
-
-       updateProgressBar(0);
-       $('#mediaType').addClass('d-none');
-       $('#mediaIcon').removeClass();
-       $('#progressDetails').addClass('d-none');
-
-       // We do this so the user has time to see that the progress
-       // bar has reset to 0% and is starting to upload.
-       await sleep(500);
-
-       identifier = $('#uploadprogressIdentifier').val();
-
-       if (fileField.files.length > 0) {
-            $.ajax({
-                     url: 'fixup.php',
-                     data: formData,
-                     cache: false,
-                     contentType: false,
-                     processData: false,
-                     method: 'POST',
-                     dataType: 'json',
-                     success: function (what) {
-                         $('#report-panel').show();
-                         clearInterval(poll);
-                         updateProgressBar(100);
-                         for(var k in what) {
-                             var kk = '#'+k; 
-                             console.log(k);
-                             console.log(what[k]);
-                             if (k.includes("slot"))
-                             {   
-                                 if (what[k] > 0)
-                                 {
-                                    $(kk).removeClass('nw');
-                                    $(kk).addClass('wo');
-                                 }
-                                 else 
-                                 {
-                                    $(kk).removeClass('wo');
-                                    $(kk).addClass('nw');
-                                 }
-                             } 
-                             else
-                             {
-                                 $(kk).text(what[k]);
-                             }
-                         }
-                       },
-                 });
-
-                 poll = setInterval(function () {
-                     pollForProgress(identifier, fileField['name']);
-                 }, 500);
-
-                 // uploadForm.reset();
-                 generateUploadIdentifier();
-		        
-             } else {
-                 alert('You should choose a file.')
-             }
-         });
-     });
-
-     function pollForProgress(id, fieldName) {
-         $.getJSON('check-progress.php?identifier=' + id + '&fieldName=' + fieldName, function(data) {
-             if (data !== null) {
-                 const percentage = (data.bytes_uploaded / data.bytes_total) * 100;
-                 if (percentage > $('#fileUploadProgress').attr('aria-valuenow')) {
-                     updateProgressBar(percentage);
-                 }
-
-                 if (data.detectedMimeType && $('#mediaType').hasClass('d-none')) {
-                     const fileType = parseFileType(data.detectedMimeType.split('/'));
-
-                     if (fileType) {
-                         $('#mediaThing').text(fileType.thingText);
-                         $('#mediaIcon').addClass('fa ' + fileType.fileIcon);
-                         $('#mediaType').removeClass('d-none');
-                     }
-                 }
-
-                 $('#progressDetails pre').text(JSON.stringify(data, null, 2));
-                 $('#progressDetails').removeClass('d-none');
-             }
-         });
-     }
-
-     function generateUploadIdentifier() {
-         $('#uploadprogressIdentifier').val(
-             Math.random().toString(36).replace('0.', '')
-         );
-     }
-
-     function updateProgressBar(percentage) {
-         $('#fileUploadProgress')
-             .css('width', percentage + '%')
-             .attr('aria-valuenow', Math.round(percentage))
-             .text(Math.round(percentage) + '%');
-     }
-
-     function sleep(ms) {
-         return new Promise(resolve => setTimeout(resolve, ms));
-     }
-
-     function parseFileType(fileType) {
-         const type = fileType[0];
-         const specifier = fileType[1];
-         let fileIcon = '';
-         let thingText = '';
-
-         fileIcon = 'fa-file-o';
-         thingText = 'an example file for ' + specifier;
-
-         return {
-             fileIcon: fileIcon,
-             thingText: thingText
-         };
-     }
- </script>
-
-<div id="report-panel">
-<b style="font-size:12px;">Report</b><br>
-<pre>
-<div style="font-size:12pt;" id="report"></div>
-</pre>
-<p>
-
-<b style="font-size:12px;">Solution</b><br>
-<textarea width=50 height=10 id="satisfied">
-</textarea>
-<!-- <pre>
-<div style="font-size:12px;" id="satisfied"></div><p>
-</pre>
--->
-<p>
-
-<b style="font-size:12px;">Needed</b><br>
-<pre>
-<div style="font-size:12px;" id="needed">/div><p>
-</pre>
-<p>
-</div>
-
-</td>
-<td style="vertical-align:top;">
- <div class="container my-5">
-<table>
-<tr>
-<th class="hcon hcd" colspan=11>QTH:
-<span class="hcd"  id="mycont"></span></th>
-</tr>
-
-<!--
-<tr>
-<td class="nwk nwkd nwkl" colspan=3>Worked:</td>
-<td class="nwk nwkd" colspan=2>
-<div style="nwkd" id="worked-count"></div>
-</td>
-<td class="nwk nwkd" colspan=4>Unworked:</td>
-<td class="nwk nwkd nwkr" colspan=2>
-<div class="nwkd" id="unworked-count"></div>
-</td>
-</tr>
--->
-
-<tr>
-<th class="lnw" ></th>
-<th class="lnw">0</th>
-<th class="lnw">1</th>
-<th class="lnw">2</th>
-<th class="lnw">3</th>
-<th class="lnw">4</th>
-<th class="lnw">5</th>
-<th class="lnw">6</th>
-<th class="lnw">7</th>
-<th class="lnw">8</th>
-<th class="lnw">9</th>
-</tr>
-
-<tr>
-<td class="lnw">A</td>
-<td class="ncl"><div id="slot_0A"></div></td>
-<td class="ncl"><div id="slot_1A"></div></td>
-<td class="ncl"><div id="slot_2A"></div></td>
-<td class="ncl"><div id="slot_3A"></div></td>
-<td class="ncl"><div id="slot_4A"></div></td>
-<td class="ncl"><div id="slot_5A"></div></td>
-<td class="ncl"><div id="slot_6A"></div></td>
-<td class="ncl"><div id="slot_7A"></div></td>
-<td class="ncl"><div id="slot_8A"></div></td>
-<td class="ncl"><div id="slot_9A"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">B</td>
-<td class="ncl"><div id="slot_0B"></div></td>
-<td class="ncl"><div id="slot_1B"></div></td>
-<td class="ncl"><div id="slot_2B"></div></td>
-<td class="ncl"><div id="slot_3B"></div></td>
-<td class="ncl"><div id="slot_4B"></div></td>
-<td class="ncl"><div id="slot_5B"></div></td>
-<td class="ncl"><div id="slot_6B"></div></td>
-<td class="ncl"><div id="slot_7B"></div></td>
-<td class="ncl"><div id="slot_8B"></div></td>
-<td class="ncl"><div id="slot_9B"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">C</td>
-<td class="ncl"><div id="slot_0C"></div></td>
-<td class="ncl"><div id="slot_1C"></div></td>
-<td class="ncl"><div id="slot_2C"></div></td>
-<td class="ncl"><div id="slot_3C"></div></td>
-<td class="ncl"><div id="slot_4C"></div></td>
-<td class="ncl"><div id="slot_5C"></div></td>
-<td class="ncl"><div id="slot_6C"></div></td>
-<td class="ncl"><div id="slot_7C"></div></td>
-<td class="ncl"><div id="slot_8C"></div></td>
-<td class="ncl"><div id="slot_9C"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">D</td>
-<td class="ncl"><div id="slot_0D"></div></td>
-<td class="ncl"><div id="slot_1D"></div></td>
-<td class="ncl"><div id="slot_2D"></div></td>
-<td class="ncl"><div id="slot_3D"></div></td>
-<td class="ncl"><div id="slot_4D"></div></td>
-<td class="ncl"><div id="slot_5D"></div></td>
-<td class="ncl"><div id="slot_6D"></div></td>
-<td class="ncl"><div id="slot_7D"></div></td>
-<td class="ncl"><div id="slot_8D"></div></td>
-<td class="ncl"><div id="slot_9D"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">E</td>
-<td class="ncl"><div id="slot_0E"></div></td>
-<td class="ncl"><div id="slot_1E"></div></td>
-<td class="ncl"><div id="slot_2E"></div></td>
-<td class="ncl"><div id="slot_3E"></div></td>
-<td class="ncl"><div id="slot_4E"></div></td>
-<td class="ncl"><div id="slot_5E"></div></td>
-<td class="ncl"><div id="slot_6E"></div></td>
-<td class="ncl"><div id="slot_7E"></div></td>
-<td class="ncl"><div id="slot_8E"></div></td>
-<td class="ncl"><div id="slot_9E"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">F</td>
-<td class="ncl"><div id="slot_0F"></div></td>
-<td class="ncl"><div id="slot_1F"></div></td>
-<td class="ncl"><div id="slot_2F"></div></td>
-<td class="ncl"><div id="slot_3F"></div></td>
-<td class="ncl"><div id="slot_4F"></div></td>
-<td class="ncl"><div id="slot_5F"></div></td>
-<td class="ncl"><div id="slot_6F"></div></td>
-<td class="ncl"><div id="slot_7F"></div></td>
-<td class="ncl"><div id="slot_8F"></div></td>
-<td class="ncl"><div id="slot_9F"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">G</td>
-<td class="ncl"><div id="slot_0G"></div></td>
-<td class="ncl"><div id="slot_1G"></div></td>
-<td class="ncl"><div id="slot_2G"></div></td>
-<td class="ncl"><div id="slot_3G"></div></td>
-<td class="ncl"><div id="slot_4G"></div></td>
-<td class="ncl"><div id="slot_5G"></div></td>
-<td class="ncl"><div id="slot_6G"></div></td>
-<td class="ncl"><div id="slot_7G"></div></td>
-<td class="ncl"><div id="slot_8G"></div></td>
-<td class="ncl"><div id="slot_9G"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">H</td>
-<td class="ncl"><div id="slot_0H"></div></td>
-<td class="ncl"><div id="slot_1H"></div></td>
-<td class="ncl"><div id="slot_2H"></div></td>
-<td class="ncl"><div id="slot_3H"></div></td>
-<td class="ncl"><div id="slot_4H"></div></td>
-<td class="ncl"><div id="slot_5H"></div></td>
-<td class="ncl"><div id="slot_6H"></div></td>
-<td class="ncl"><div id="slot_7H"></div></td>
-<td class="ncl"><div id="slot_8H"></div></td>
-<td class="ncl"><div id="slot_9H"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">I</td>
-<td class="ncl"><div id="slot_0I"></div></td>
-<td class="ncl"><div id="slot_1I"></div></td>
-<td class="ncl"><div id="slot_2I"></div></td>
-<td class="ncl"><div id="slot_3I"></div></td>
-<td class="ncl"><div id="slot_4I"></div></td>
-<td class="ncl"><div id="slot_5I"></div></td>
-<td class="ncl"><div id="slot_6I"></div></td>
-<td class="ncl"><div id="slot_7I"></div></td>
-<td class="ncl"><div id="slot_8I"></div></td>
-<td class="ncl"><div id="slot_9I"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">J</td>
-<td class="ncl"><div id="slot_0J"></div></td>
-<td class="ncl"><div id="slot_1J"></div></td>
-<td class="ncl"><div id="slot_2J"></div></td>
-<td class="ncl"><div id="slot_3J"></div></td>
-<td class="ncl"><div id="slot_4J"></div></td>
-<td class="ncl"><div id="slot_5J"></div></td>
-<td class="ncl"><div id="slot_6J"></div></td>
-<td class="ncl"><div id="slot_7J"></div></td>
-<td class="ncl"><div id="slot_8J"></div></td>
-<td class="ncl"><div id="slot_9J"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">K</td>
-<td class="ncl"><div id="slot_0K"></div></td>
-<td class="ncl"><div id="slot_1K"></div></td>
-<td class="ncl"><div id="slot_2K"></div></td>
-<td class="ncl"><div id="slot_3K"></div></td>
-<td class="ncl"><div id="slot_4K"></div></td>
-<td class="ncl"><div id="slot_5K"></div></td>
-<td class="ncl"><div id="slot_6K"></div></td>
-<td class="ncl"><div id="slot_7K"></div></td>
-<td class="ncl"><div id="slot_8K"></div></td>
-<td class="ncl"><div id="slot_9K"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">L</td>
-<td class="ncl"><div id="slot_0L"></div></td>
-<td class="ncl"><div id="slot_1L"></div></td>
-<td class="ncl"><div id="slot_2L"></div></td>
-<td class="ncl"><div id="slot_3L"></div></td>
-<td class="ncl"><div id="slot_4L"></div></td>
-<td class="ncl"><div id="slot_5L"></div></td>
-<td class="ncl"><div id="slot_6L"></div></td>
-<td class="ncl"><div id="slot_7L"></div></td>
-<td class="ncl"><div id="slot_8L"></div></td>
-<td class="ncl"><div id="slot_9L"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">M</td>
-<td class="ncl"><div id="slot_0M"></div></td>
-<td class="ncl"><div id="slot_1M"></div></td>
-<td class="ncl"><div id="slot_2M"></div></td>
-<td class="ncl"><div id="slot_3M"></div></td>
-<td class="ncl"><div id="slot_4M"></div></td>
-<td class="ncl"><div id="slot_5M"></div></td>
-<td class="ncl"><div id="slot_6M"></div></td>
-<td class="ncl"><div id="slot_7M"></div></td>
-<td class="ncl"><div id="slot_8M"></div></td>
-<td class="ncl"><div id="slot_9M"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">N</td>
-<td class="ncl"><div id="slot_0N"></div></td>
-<td class="ncl"><div id="slot_1N"></div></td>
-<td class="ncl"><div id="slot_2N"></div></td>
-<td class="ncl"><div id="slot_3N"></div></td>
-<td class="ncl"><div id="slot_4N"></div></td>
-<td class="ncl"><div id="slot_5N"></div></td>
-<td class="ncl"><div id="slot_6N"></div></td>
-<td class="ncl"><div id="slot_7N"></div></td>
-<td class="ncl"><div id="slot_8N"></div></td>
-<td class="ncl"><div id="slot_9N"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">O</td>
-<td class="ncl"><div id="slot_0O"></div></td>
-<td class="ncl"><div id="slot_1O"></div></td>
-<td class="ncl"><div id="slot_2O"></div></td>
-<td class="ncl"><div id="slot_3O"></div></td>
-<td class="ncl"><div id="slot_4O"></div></td>
-<td class="ncl"><div id="slot_5O"></div></td>
-<td class="ncl"><div id="slot_6O"></div></td>
-<td class="ncl"><div id="slot_7O"></div></td>
-<td class="ncl"><div id="slot_8O"></div></td>
-<td class="ncl"><div id="slot_9O"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">P</td>
-<td class="ncl"><div id="slot_0P"></div></td>
-<td class="ncl"><div id="slot_1P"></div></td>
-<td class="ncl"><div id="slot_2P"></div></td>
-<td class="ncl"><div id="slot_3P"></div></td>
-<td class="ncl"><div id="slot_4P"></div></td>
-<td class="ncl"><div id="slot_5P"></div></td>
-<td class="ncl"><div id="slot_6P"></div></td>
-<td class="ncl"><div id="slot_7P"></div></td>
-<td class="ncl"><div id="slot_8P"></div></td>
-<td class="ncl"><div id="slot_9P"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">Q</td>
-<td class="ncl"><div id="slot_0Q"></div></td>
-<td class="ncl"><div id="slot_1Q"></div></td>
-<td class="ncl"><div id="slot_2Q"></div></td>
-<td class="ncl"><div id="slot_3Q"></div></td>
-<td class="ncl"><div id="slot_4Q"></div></td>
-<td class="ncl"><div id="slot_5Q"></div></td>
-<td class="ncl"><div id="slot_6Q"></div></td>
-<td class="ncl"><div id="slot_7Q"></div></td>
-<td class="ncl"><div id="slot_8Q"></div></td>
-<td class="ncl"><div id="slot_9Q"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">R</td>
-<td class="ncl"><div id="slot_0R"></div></td>
-<td class="ncl"><div id="slot_1R"></div></td>
-<td class="ncl"><div id="slot_2R"></div></td>
-<td class="ncl"><div id="slot_3R"></div></td>
-<td class="ncl"><div id="slot_4R"></div></td>
-<td class="ncl"><div id="slot_5R"></div></td>
-<td class="ncl"><div id="slot_6R"></div></td>
-<td class="ncl"><div id="slot_7R"></div></td>
-<td class="ncl"><div id="slot_8R"></div></td>
-<td class="ncl"><div id="slot_9R"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">S</td>
-<td class="ncl"><div id="slot_0S"></div></td>
-<td class="ncl"><div id="slot_1S"></div></td>
-<td class="ncl"><div id="slot_2S"></div></td>
-<td class="ncl"><div id="slot_3S"></div></td>
-<td class="ncl"><div id="slot_4S"></div></td>
-<td class="ncl"><div id="slot_5S"></div></td>
-<td class="ncl"><div id="slot_6S"></div></td>
-<td class="ncl"><div id="slot_7S"></div></td>
-<td class="ncl"><div id="slot_8S"></div></td>
-<td class="ncl"><div id="slot_9S"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">T</td>
-<td class="ncl"><div id="slot_0T"></div></td>
-<td class="ncl"><div id="slot_1T"></div></td>
-<td class="ncl"><div id="slot_2T"></div></td>
-<td class="ncl"><div id="slot_3T"></div></td>
-<td class="ncl"><div id="slot_4T"></div></td>
-<td class="ncl"><div id="slot_5T"></div></td>
-<td class="ncl"><div id="slot_6T"></div></td>
-<td class="ncl"><div id="slot_7T"></div></td>
-<td class="ncl"><div id="slot_8T"></div></td>
-<td class="ncl"><div id="slot_9T"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">U</td>
-<td class="ncl"><div id="slot_0U"></div></td>
-<td class="ncl"><div id="slot_1U"></div></td>
-<td class="ncl"><div id="slot_2U"></div></td>
-<td class="ncl"><div id="slot_3U"></div></td>
-<td class="ncl"><div id="slot_4U"></div></td>
-<td class="ncl"><div id="slot_5U"></div></td>
-<td class="ncl"><div id="slot_6U"></div></td>
-<td class="ncl"><div id="slot_7U"></div></td>
-<td class="ncl"><div id="slot_8U"></div></td>
-<td class="ncl"><div id="slot_9U"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">V</td>
-<td class="ncl"><div id="slot_0V"></div></td>
-<td class="ncl"><div id="slot_1V"></div></td>
-<td class="ncl"><div id="slot_2V"></div></td>
-<td class="ncl"><div id="slot_3V"></div></td>
-<td class="ncl"><div id="slot_4V"></div></td>
-<td class="ncl"><div id="slot_5V"></div></td>
-<td class="ncl"><div id="slot_6V"></div></td>
-<td class="ncl"><div id="slot_7V"></div></td>
-<td class="ncl"><div id="slot_8V"></div></td>
-<td class="ncl"><div id="slot_9V"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">W</td>
-<td class="ncl"><div id="slot_0W"></div></td>
-<td class="ncl"><div id="slot_1W"></div></td>
-<td class="ncl"><div id="slot_2W"></div></td>
-<td class="ncl"><div id="slot_3W"></div></td>
-<td class="ncl"><div id="slot_4W"></div></td>
-<td class="ncl"><div id="slot_5W"></div></td>
-<td class="ncl"><div id="slot_6W"></div></td>
-<td class="ncl"><div id="slot_7W"></div></td>
-<td class="ncl"><div id="slot_8W"></div></td>
-<td class="ncl"><div id="slot_9W"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">X</td>
-<td class="ncl"><div id="slot_0X"></div></td>
-<td class="ncl"><div id="slot_1X"></div></td>
-<td class="ncl"><div id="slot_2X"></div></td>
-<td class="ncl"><div id="slot_3X"></div></td>
-<td class="ncl"><div id="slot_4X"></div></td>
-<td class="ncl"><div id="slot_5X"></div></td>
-<td class="ncl"><div id="slot_6X"></div></td>
-<td class="ncl"><div id="slot_7X"></div></td>
-<td class="ncl"><div id="slot_8X"></div></td>
-<td class="ncl"><div id="slot_9X"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">Y</td>
-<td class="ncl"><div id="slot_0Y"></div></td>
-<td class="ncl"><div id="slot_1Y"></div></td>
-<td class="ncl"><div id="slot_2Y"></div></td>
-<td class="ncl"><div id="slot_3Y"></div></td>
-<td class="ncl"><div id="slot_4Y"></div></td>
-<td class="ncl"><div id="slot_5Y"></div></td>
-<td class="ncl"><div id="slot_6Y"></div></td>
-<td class="ncl"><div id="slot_7Y"></div></td>
-<td class="ncl"><div id="slot_8Y"></div></td>
-<td class="ncl"><div id="slot_9Y"></div></td>
-</tr>
-
-<tr>
-<td class="lnw">Z</td>
-<td class="ncl"><div id="slot_0Z"></div></td>
-<td class="ncl"><div id="slot_1Z"></div></td>
-<td class="ncl"><div id="slot_2Z"></div></td>
-<td class="ncl"><div id="slot_3Z"></div></td>
-<td class="ncl"><div id="slot_4Z"></div></td>
-<td class="ncl"><div id="slot_5Z"></div></td>
-<td class="ncl"><div id="slot_6Z"></div></td>
-<td class="ncl"><div id="slot_7Z"></div></td>
-<td class="ncl"><div id="slot_8Z"></div></td>
-<td class="ncl"><div id="slot_9Z"></div></td>
-</tr>
-
-<!-- table ends -->
-</table>
-
-
-</div>
-</td>
-</tr>
-</table>
+      <tr>
+      <th class="lnw" ></th>
+      <th class="lnw">0</th>
+      <th class="lnw">1</th>
+      <th class="lnw">2</th>
+      <th class="lnw">3</th>
+      <th class="lnw">4</th>
+      <th class="lnw">5</th>
+      <th class="lnw">6</th>
+      <th class="lnw">7</th>
+      <th class="lnw">8</th>
+      <th class="lnw">9</th>
+      </tr>
+      
+      <tr>
+      <td class="lnw">A</td>
+      <td class="ncl"><div id="slot_0A"></div></td>
+      <td class="ncl"><div id="slot_1A"></div></td>
+      <td class="ncl"><div id="slot_2A"></div></td>
+      <td class="ncl"><div id="slot_3A"></div></td>
+      <td class="ncl"><div id="slot_4A"></div></td>
+      <td class="ncl"><div id="slot_5A"></div></td>
+      <td class="ncl"><div id="slot_6A"></div></td>
+      <td class="ncl"><div id="slot_7A"></div></td>
+      <td class="ncl"><div id="slot_8A"></div></td>
+      <td class="ncl"><div id="slot_9A"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">B</td>
+      <td class="ncl"><div id="slot_0B"></div></td>
+      <td class="ncl"><div id="slot_1B"></div></td>
+      <td class="ncl"><div id="slot_2B"></div></td>
+      <td class="ncl"><div id="slot_3B"></div></td>
+      <td class="ncl"><div id="slot_4B"></div></td>
+      <td class="ncl"><div id="slot_5B"></div></td>
+      <td class="ncl"><div id="slot_6B"></div></td>
+      <td class="ncl"><div id="slot_7B"></div></td>
+      <td class="ncl"><div id="slot_8B"></div></td>
+      <td class="ncl"><div id="slot_9B"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">C</td>
+      <td class="ncl"><div id="slot_0C"></div></td>
+      <td class="ncl"><div id="slot_1C"></div></td>
+      <td class="ncl"><div id="slot_2C"></div></td>
+      <td class="ncl"><div id="slot_3C"></div></td>
+      <td class="ncl"><div id="slot_4C"></div></td>
+      <td class="ncl"><div id="slot_5C"></div></td>
+      <td class="ncl"><div id="slot_6C"></div></td>
+      <td class="ncl"><div id="slot_7C"></div></td>
+      <td class="ncl"><div id="slot_8C"></div></td>
+      <td class="ncl"><div id="slot_9C"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">D</td>
+      <td class="ncl"><div id="slot_0D"></div></td>
+      <td class="ncl"><div id="slot_1D"></div></td>
+      <td class="ncl"><div id="slot_2D"></div></td>
+      <td class="ncl"><div id="slot_3D"></div></td>
+      <td class="ncl"><div id="slot_4D"></div></td>
+      <td class="ncl"><div id="slot_5D"></div></td>
+      <td class="ncl"><div id="slot_6D"></div></td>
+      <td class="ncl"><div id="slot_7D"></div></td>
+      <td class="ncl"><div id="slot_8D"></div></td>
+      <td class="ncl"><div id="slot_9D"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">E</td>
+      <td class="ncl"><div id="slot_0E"></div></td>
+      <td class="ncl"><div id="slot_1E"></div></td>
+      <td class="ncl"><div id="slot_2E"></div></td>
+      <td class="ncl"><div id="slot_3E"></div></td>
+      <td class="ncl"><div id="slot_4E"></div></td>
+      <td class="ncl"><div id="slot_5E"></div></td>
+      <td class="ncl"><div id="slot_6E"></div></td>
+      <td class="ncl"><div id="slot_7E"></div></td>
+      <td class="ncl"><div id="slot_8E"></div></td>
+      <td class="ncl"><div id="slot_9E"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">F</td>
+      <td class="ncl"><div id="slot_0F"></div></td>
+      <td class="ncl"><div id="slot_1F"></div></td>
+      <td class="ncl"><div id="slot_2F"></div></td>
+      <td class="ncl"><div id="slot_3F"></div></td>
+      <td class="ncl"><div id="slot_4F"></div></td>
+      <td class="ncl"><div id="slot_5F"></div></td>
+      <td class="ncl"><div id="slot_6F"></div></td>
+      <td class="ncl"><div id="slot_7F"></div></td>
+      <td class="ncl"><div id="slot_8F"></div></td>
+      <td class="ncl"><div id="slot_9F"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">G</td>
+      <td class="ncl"><div id="slot_0G"></div></td>
+      <td class="ncl"><div id="slot_1G"></div></td>
+      <td class="ncl"><div id="slot_2G"></div></td>
+      <td class="ncl"><div id="slot_3G"></div></td>
+      <td class="ncl"><div id="slot_4G"></div></td>
+      <td class="ncl"><div id="slot_5G"></div></td>
+      <td class="ncl"><div id="slot_6G"></div></td>
+      <td class="ncl"><div id="slot_7G"></div></td>
+      <td class="ncl"><div id="slot_8G"></div></td>
+      <td class="ncl"><div id="slot_9G"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">H</td>
+      <td class="ncl"><div id="slot_0H"></div></td>
+      <td class="ncl"><div id="slot_1H"></div></td>
+      <td class="ncl"><div id="slot_2H"></div></td>
+      <td class="ncl"><div id="slot_3H"></div></td>
+      <td class="ncl"><div id="slot_4H"></div></td>
+      <td class="ncl"><div id="slot_5H"></div></td>
+      <td class="ncl"><div id="slot_6H"></div></td>
+      <td class="ncl"><div id="slot_7H"></div></td>
+      <td class="ncl"><div id="slot_8H"></div></td>
+      <td class="ncl"><div id="slot_9H"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">I</td>
+      <td class="ncl"><div id="slot_0I"></div></td>
+      <td class="ncl"><div id="slot_1I"></div></td>
+      <td class="ncl"><div id="slot_2I"></div></td>
+      <td class="ncl"><div id="slot_3I"></div></td>
+      <td class="ncl"><div id="slot_4I"></div></td>
+      <td class="ncl"><div id="slot_5I"></div></td>
+      <td class="ncl"><div id="slot_6I"></div></td>
+      <td class="ncl"><div id="slot_7I"></div></td>
+      <td class="ncl"><div id="slot_8I"></div></td>
+      <td class="ncl"><div id="slot_9I"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">J</td>
+      <td class="ncl"><div id="slot_0J"></div></td>
+      <td class="ncl"><div id="slot_1J"></div></td>
+      <td class="ncl"><div id="slot_2J"></div></td>
+      <td class="ncl"><div id="slot_3J"></div></td>
+      <td class="ncl"><div id="slot_4J"></div></td>
+      <td class="ncl"><div id="slot_5J"></div></td>
+      <td class="ncl"><div id="slot_6J"></div></td>
+      <td class="ncl"><div id="slot_7J"></div></td>
+      <td class="ncl"><div id="slot_8J"></div></td>
+      <td class="ncl"><div id="slot_9J"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">K</td>
+      <td class="ncl"><div id="slot_0K"></div></td>
+      <td class="ncl"><div id="slot_1K"></div></td>
+      <td class="ncl"><div id="slot_2K"></div></td>
+      <td class="ncl"><div id="slot_3K"></div></td>
+      <td class="ncl"><div id="slot_4K"></div></td>
+      <td class="ncl"><div id="slot_5K"></div></td>
+      <td class="ncl"><div id="slot_6K"></div></td>
+      <td class="ncl"><div id="slot_7K"></div></td>
+      <td class="ncl"><div id="slot_8K"></div></td>
+      <td class="ncl"><div id="slot_9K"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">L</td>
+      <td class="ncl"><div id="slot_0L"></div></td>
+      <td class="ncl"><div id="slot_1L"></div></td>
+      <td class="ncl"><div id="slot_2L"></div></td>
+      <td class="ncl"><div id="slot_3L"></div></td>
+      <td class="ncl"><div id="slot_4L"></div></td>
+      <td class="ncl"><div id="slot_5L"></div></td>
+      <td class="ncl"><div id="slot_6L"></div></td>
+      <td class="ncl"><div id="slot_7L"></div></td>
+      <td class="ncl"><div id="slot_8L"></div></td>
+      <td class="ncl"><div id="slot_9L"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">M</td>
+      <td class="ncl"><div id="slot_0M"></div></td>
+      <td class="ncl"><div id="slot_1M"></div></td>
+      <td class="ncl"><div id="slot_2M"></div></td>
+      <td class="ncl"><div id="slot_3M"></div></td>
+      <td class="ncl"><div id="slot_4M"></div></td>
+      <td class="ncl"><div id="slot_5M"></div></td>
+      <td class="ncl"><div id="slot_6M"></div></td>
+      <td class="ncl"><div id="slot_7M"></div></td>
+      <td class="ncl"><div id="slot_8M"></div></td>
+      <td class="ncl"><div id="slot_9M"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">N</td>
+      <td class="ncl"><div id="slot_0N"></div></td>
+      <td class="ncl"><div id="slot_1N"></div></td>
+      <td class="ncl"><div id="slot_2N"></div></td>
+      <td class="ncl"><div id="slot_3N"></div></td>
+      <td class="ncl"><div id="slot_4N"></div></td>
+      <td class="ncl"><div id="slot_5N"></div></td>
+      <td class="ncl"><div id="slot_6N"></div></td>
+      <td class="ncl"><div id="slot_7N"></div></td>
+      <td class="ncl"><div id="slot_8N"></div></td>
+      <td class="ncl"><div id="slot_9N"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">O</td>
+      <td class="ncl"><div id="slot_0O"></div></td>
+      <td class="ncl"><div id="slot_1O"></div></td>
+      <td class="ncl"><div id="slot_2O"></div></td>
+      <td class="ncl"><div id="slot_3O"></div></td>
+      <td class="ncl"><div id="slot_4O"></div></td>
+      <td class="ncl"><div id="slot_5O"></div></td>
+      <td class="ncl"><div id="slot_6O"></div></td>
+      <td class="ncl"><div id="slot_7O"></div></td>
+      <td class="ncl"><div id="slot_8O"></div></td>
+      <td class="ncl"><div id="slot_9O"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">P</td>
+      <td class="ncl"><div id="slot_0P"></div></td>
+      <td class="ncl"><div id="slot_1P"></div></td>
+      <td class="ncl"><div id="slot_2P"></div></td>
+      <td class="ncl"><div id="slot_3P"></div></td>
+      <td class="ncl"><div id="slot_4P"></div></td>
+      <td class="ncl"><div id="slot_5P"></div></td>
+      <td class="ncl"><div id="slot_6P"></div></td>
+      <td class="ncl"><div id="slot_7P"></div></td>
+      <td class="ncl"><div id="slot_8P"></div></td>
+      <td class="ncl"><div id="slot_9P"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">Q</td>
+      <td class="ncl"><div id="slot_0Q"></div></td>
+      <td class="ncl"><div id="slot_1Q"></div></td>
+      <td class="ncl"><div id="slot_2Q"></div></td>
+      <td class="ncl"><div id="slot_3Q"></div></td>
+      <td class="ncl"><div id="slot_4Q"></div></td>
+      <td class="ncl"><div id="slot_5Q"></div></td>
+      <td class="ncl"><div id="slot_6Q"></div></td>
+      <td class="ncl"><div id="slot_7Q"></div></td>
+      <td class="ncl"><div id="slot_8Q"></div></td>
+      <td class="ncl"><div id="slot_9Q"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">R</td>
+      <td class="ncl"><div id="slot_0R"></div></td>
+      <td class="ncl"><div id="slot_1R"></div></td>
+      <td class="ncl"><div id="slot_2R"></div></td>
+      <td class="ncl"><div id="slot_3R"></div></td>
+      <td class="ncl"><div id="slot_4R"></div></td>
+      <td class="ncl"><div id="slot_5R"></div></td>
+      <td class="ncl"><div id="slot_6R"></div></td>
+      <td class="ncl"><div id="slot_7R"></div></td>
+      <td class="ncl"><div id="slot_8R"></div></td>
+      <td class="ncl"><div id="slot_9R"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">S</td>
+      <td class="ncl"><div id="slot_0S"></div></td>
+      <td class="ncl"><div id="slot_1S"></div></td>
+      <td class="ncl"><div id="slot_2S"></div></td>
+      <td class="ncl"><div id="slot_3S"></div></td>
+      <td class="ncl"><div id="slot_4S"></div></td>
+      <td class="ncl"><div id="slot_5S"></div></td>
+      <td class="ncl"><div id="slot_6S"></div></td>
+      <td class="ncl"><div id="slot_7S"></div></td>
+      <td class="ncl"><div id="slot_8S"></div></td>
+      <td class="ncl"><div id="slot_9S"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">T</td>
+      <td class="ncl"><div id="slot_0T"></div></td>
+      <td class="ncl"><div id="slot_1T"></div></td>
+      <td class="ncl"><div id="slot_2T"></div></td>
+      <td class="ncl"><div id="slot_3T"></div></td>
+      <td class="ncl"><div id="slot_4T"></div></td>
+      <td class="ncl"><div id="slot_5T"></div></td>
+      <td class="ncl"><div id="slot_6T"></div></td>
+      <td class="ncl"><div id="slot_7T"></div></td>
+      <td class="ncl"><div id="slot_8T"></div></td>
+      <td class="ncl"><div id="slot_9T"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">U</td>
+      <td class="ncl"><div id="slot_0U"></div></td>
+      <td class="ncl"><div id="slot_1U"></div></td>
+      <td class="ncl"><div id="slot_2U"></div></td>
+      <td class="ncl"><div id="slot_3U"></div></td>
+      <td class="ncl"><div id="slot_4U"></div></td>
+      <td class="ncl"><div id="slot_5U"></div></td>
+      <td class="ncl"><div id="slot_6U"></div></td>
+      <td class="ncl"><div id="slot_7U"></div></td>
+      <td class="ncl"><div id="slot_8U"></div></td>
+      <td class="ncl"><div id="slot_9U"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">V</td>
+      <td class="ncl"><div id="slot_0V"></div></td>
+      <td class="ncl"><div id="slot_1V"></div></td>
+      <td class="ncl"><div id="slot_2V"></div></td>
+      <td class="ncl"><div id="slot_3V"></div></td>
+      <td class="ncl"><div id="slot_4V"></div></td>
+      <td class="ncl"><div id="slot_5V"></div></td>
+      <td class="ncl"><div id="slot_6V"></div></td>
+      <td class="ncl"><div id="slot_7V"></div></td>
+      <td class="ncl"><div id="slot_8V"></div></td>
+      <td class="ncl"><div id="slot_9V"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">W</td>
+      <td class="ncl"><div id="slot_0W"></div></td>
+      <td class="ncl"><div id="slot_1W"></div></td>
+      <td class="ncl"><div id="slot_2W"></div></td>
+      <td class="ncl"><div id="slot_3W"></div></td>
+      <td class="ncl"><div id="slot_4W"></div></td>
+      <td class="ncl"><div id="slot_5W"></div></td>
+      <td class="ncl"><div id="slot_6W"></div></td>
+      <td class="ncl"><div id="slot_7W"></div></td>
+      <td class="ncl"><div id="slot_8W"></div></td>
+      <td class="ncl"><div id="slot_9W"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">X</td>
+      <td class="ncl"><div id="slot_0X"></div></td>
+      <td class="ncl"><div id="slot_1X"></div></td>
+      <td class="ncl"><div id="slot_2X"></div></td>
+      <td class="ncl"><div id="slot_3X"></div></td>
+      <td class="ncl"><div id="slot_4X"></div></td>
+      <td class="ncl"><div id="slot_5X"></div></td>
+      <td class="ncl"><div id="slot_6X"></div></td>
+      <td class="ncl"><div id="slot_7X"></div></td>
+      <td class="ncl"><div id="slot_8X"></div></td>
+      <td class="ncl"><div id="slot_9X"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">Y</td>
+      <td class="ncl"><div id="slot_0Y"></div></td>
+      <td class="ncl"><div id="slot_1Y"></div></td>
+      <td class="ncl"><div id="slot_2Y"></div></td>
+      <td class="ncl"><div id="slot_3Y"></div></td>
+      <td class="ncl"><div id="slot_4Y"></div></td>
+      <td class="ncl"><div id="slot_5Y"></div></td>
+      <td class="ncl"><div id="slot_6Y"></div></td>
+      <td class="ncl"><div id="slot_7Y"></div></td>
+      <td class="ncl"><div id="slot_8Y"></div></td>
+      <td class="ncl"><div id="slot_9Y"></div></td>
+      </tr>
+      
+      <tr>
+      <td class="lnw">Z</td>
+      <td class="ncl"><div id="slot_0Z"></div></td>
+      <td class="ncl"><div id="slot_1Z"></div></td>
+      <td class="ncl"><div id="slot_2Z"></div></td>
+      <td class="ncl"><div id="slot_3Z"></div></td>
+      <td class="ncl"><div id="slot_4Z"></div></td>
+      <td class="ncl"><div id="slot_5Z"></div></td>
+      <td class="ncl"><div id="slot_6Z"></div></td>
+      <td class="ncl"><div id="slot_7Z"></div></td>
+      <td class="ncl"><div id="slot_8Z"></div></td>
+      <td class="ncl"><div id="slot_9Z"></div></td>
+      </tr>
+      
+      </table>
+    </div>
+    </td>
+    </tr>
+  </table>
+  <br> 
+<hr>
+<span style="font-family:Times-Roman;">&copy; Jeff Wandling, W7BRS</span>
 </body>
 </html>

@@ -1,23 +1,5 @@
 <?php
 
-/*
-  +----------------------------------------------------------------------+
-  | Uploadprogress extension                                             |
-  +----------------------------------------------------------------------+
-  | Copyright (c) The PHP Group                                          |
-  +----------------------------------------------------------------------+
-  | This source file is subject to version 3.01 of the PHP license,      |
-  | that is bundled with this package in the file LICENSE, and is        |
-  | available through the world-wide-web at the following url:           |
-  | http://www.php.net/license/3_01.txt.                                 |
-  | If you did not receive a copy of the PHP license and are unable to   |
-  | obtain it through the world-wide-web, please send a note to          |
-  | license@php.net so we can mail you a copy immediately.               |
-  +----------------------------------------------------------------------+
-  | Author: Ben Ramsey (ramsey@php.net)                                  |
-  +----------------------------------------------------------------------+
-*/
-
 // NOTE: This code is only executed after the entire file has finished uploading
 // to the server. Once the last byte reaches the server, this script begins
 // execution.
@@ -65,7 +47,7 @@ $naany = array('status' => 'ok');
 function dx2cont($dxid)
 {
     // Given an ARRL DXCC ID number - translate to the ARRL Continent Name
-    switch ($dxid)
+    switch (intval($dxid))
     {
     case 247: return "AS";
     case 246: return "EU";
@@ -406,7 +388,8 @@ function dx2cont($dxid)
     case 132: return "SA";
     case 462: return "AF";
     case 201: return "AF";
-    default: return "Unknown Continent";
+    default: 
+      return null;
     }
 }
 
@@ -434,9 +417,11 @@ foreach ($letar as $let)
 // The continent from the user post data
 // We get it from POST data, but we also send it back for the display.
 $naany['mycont'] = $_POST['mycont'];
+$naany['theyear'] = $_POST['theyear'];
 
 // A scratch pad for the list of callsigns that satisfied the job
 $satisfied = "";
+$sequence = 0;
 
 // OK, Let's start the ball rolling...
 
@@ -450,7 +435,12 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
 {
     // This works only on the contacts in the Log for the current year.
     // Whatever that year is, we only care about the current year.
-    $curYear = date('Y');
+    //$curYear = date('Y');
+    $curYear = $naany['theyear'];
+    if ($curYear < 0) {
+       $curYear = date('Y');
+    }
+    $naany['yeartested'] = $curYear;
 
     // Open the file uploaded, and begin parsing.
     $fileHandle = fopen($_FILES['uploadprogressFile']['tmp_name'], 'r');
@@ -481,15 +471,33 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
           {
               // The candidate DXCC ID of this Log entry
               $thiscont = dx2cont($matches[1]);
-              // If the continent of this entry is the same as the user
-              // we skip it.
-              if ( strcmp($thiscont,$naany['mycont']) != 0)
-              {
-
-                  $seendxcc = 1;
-              }
           }
-                 
+          elseif (!$seendxcc && preg_match('/.*<DXCC:\d+\:N>(\d+).*/i', $x, $matches))
+          {
+              // The candidate DXCC ID of this Log entry
+              $thiscont = dx2cont($matches[1]);
+          }
+          else {
+              $thiscont = '';
+          }
+
+          if ($thiscont && !$seendxcc)
+          {
+             // If the continent of this entry is the same as the user
+             // we skip it.
+             if ( strcmp($thiscont,$naany['mycont']) != 0)
+             {
+                 $seendxcc = 1;
+             }
+          } 
+          //else
+          //{
+          //   $naany['record-bad-cont'] =  $x;
+          //   $thiscont = 'Unknown';
+          //   $seendxcc = 1;
+          //}
+                       
+
           // At this point we have a QSO with a station in the current
           // year and NOT in their continent.. so let's keep parsing
 
@@ -516,8 +524,6 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
            if (!$seenband && preg_match('/<BAND:\d+>(\d+m)\s/i', $x, $matches))
            {
                $band=$matches[1];
-
-
                $seenband = 1;
            }
 
@@ -536,8 +542,8 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
                   } else {
                      $naany[$sk] = 1;
                   }
-                  $satisfied .= "$call satisfied $lastnum$lastlet\n";
-
+                  
+                  $satisfied .= "$lastnum$lastlet, $call, $band, $thiscont\n";
                      if (isset($byband[$band]))  {
                         $byband[$band]++;
                      }
@@ -574,7 +580,7 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
     $need = '';
 
     $pretty_print_needcount = 0;
-    $multi = 1;
+    //multi  $multi = 1;
     foreach ($letar as $let)
     {
         foreach ($numar as $num)
@@ -582,7 +588,7 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
                $sk = "slot_" . "$num" . "$let";
                if ($naany[$sk] == 0) 
                {
-                   $multi = 0;
+                   //multi $multi = 0;
                    $need .= "$num" . "$let" . " ";
                    $pretty_print_needcount++;
                    // Print 16 combo's per line
@@ -598,29 +604,29 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
     }
 
 
-    $naanydegree = 0;
-    $multicount = 0;
-    if ($multi > 0)
-    {
-        do
-        {
-            $multicount = 0; 
-            foreach ($letar as $let)
-            {
-               foreach ($numar as $num)
-               {
-                   $sk = "slot_" . "$num" . "$let";
-                   if ($naany[$sk] > (1+$naanydegree))
-                   {
-                       $multicount++;
-                   }
-               }
-            }
-            if ($multicount == 260) {
-              $naanydegree++;
-            }
-        } while($multicount == 260);
-    }
+// multi     $naanydegree = 0;
+// multi     $multicount = 0;
+// multi     if ($multi > 0)
+// multi     {
+// multi         do
+// multi         {
+// multi             $multicount = 0; 
+// multi             foreach ($letar as $let)
+// multi             {
+// multi                foreach ($numar as $num)
+// multi                {
+// multi                    $sk = "slot_" . "$num" . "$let";
+// multi                    if ($naany[$sk] > (1+$naanydegree))
+// multi                    {
+// multi                        $multicount++;
+// multi                    }
+// multi                }
+// multi             }
+// multi             if ($multicount == 260) {
+// multi               $naanydegree++;
+// multi             }
+// multi         } while($multicount == 260);
+// multi     }
 
     $naany['needed'] = "$need";
     $naany['satisfied'] = $satisfied;
@@ -631,43 +637,39 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
     foreach($byband as $bkey => $bvalue)
     {
              $bandcount++;
-             // $bandreport_suffix = ($bvalue > 1)?"s":"";
-             $bandreport .= "$bkey\n"; 
-             //  worked $bvalue time$bandreport_suffix\n";
+             $bandreport_suffix = ($bvalue > 1)?"s":"";
+             $bandreport .= "$bkey worked $bvalue time$bandreport_suffix\n\n";
     }
 
     $contreport = "";
     foreach($bycont as $ckey => $cvalue)
     {
              $contcount++;
-			 // $contreport_suffix = ($cvalue > 1)?"s":"";
-             $contreport .= "$ckey\n"; 
-             // worked $cvalue time$contreport_suffix\n";
+			 $contreport_suffix = ($cvalue > 1)?"s":"";
+             $contreport .= "$ckey worked $cvalue time$contreport_suffix\n\n";
     }
 
     $effectivenaanies = $naanies;
-    if ($naanydegree > 0)
-    {
-       $effectivenaanies = 260 * (1+$naanydegree) + $multicount;
-    }
+
+//    if ($naanydegree > 0)
+//    {
+//       $effectivenaanies = 260 * (1+$naanydegree) + $multicount;
+//    }
     $naany['report'] = "You worked a total of $effectivenaanies NAANY contacts.\n" ;
-    if ($naanydegree > 0) {
-        $naanydegree++;
-        $naany['report'] .= "BONUS: You worked a total of $naanydegree MULTI NAANY multiples.\n";
-    } 
+//    if ($naanydegree > 0) {
+//        $naanydegree++;
+//        $naany['report'] .= "BONUS: You worked a total of $naanydegree MULTI NAANY multiples.\n";
+//    } 
     $bandcount_suffix = ($bandcount > 1)?"s":"";
     $contcount_suffix = ($contcount > 1)?"s":"";
     $naany['report'] .= 
-"You worked them across $bandcount band$bandcount_suffix and $contcount continent${contcount_suffix}.\n" .
-                       "Band report:\n" .
-                       $bandreport . "\n" .
-                       "Continent report:\n" .
-                       $contreport . "\n";
+"You worked them across $bandcount band$bandcount_suffix and $contcount continent${contcount_suffix}.\n";
 
-    
-
-} // checking if a file
-
+//                   "Band report:\n" .
+//                   $bandreport . "\n" .
+//                   "Continent report:\n" .
+//                   $contreport . "\n";
+}
 // All data that is consumed by the AJAX async callback is now
 // sent back to the caller.... Enjoy.
 echo json_encode($naany);
