@@ -536,19 +536,19 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
              }
               
              $satisfied .= "$lastnum$lastlet, $call, $band, $thiscont\n";
-                if (isset($byband[$band]))  {
-                   $byband[$band]++;
-                }
-                else {
-                   $byband[$band] = 1;
-                }
+             if (isset($byband[$band]))  {
+                $byband[$band]++;
+             }
+             else {
+                $byband[$band] = 1;
+             }
 
-                if (isset($bycont[$thiscont])) {
-                   $bycont[$thiscont]++;
-                }
-                else {
-                   $bycont[$thiscont] = 1;
-                }
+             if (isset($bycont[$thiscont])) {
+                $bycont[$thiscont]++;
+             }
+             else {
+                $bycont[$thiscont] = 1;
+             }
           }
           $seendate = 0;
           $seendxcc = 0;
@@ -562,8 +562,8 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
       }
       else 
       {
-           // have not yet seen EOR. so keep looking
-           $naany["record-ended-but-no-valid-qso"] = 1;
+          // have not yet seen EOR. so keep looking
+          $naany["record-ended-but-no-valid-qso"] = 1;
       }
     }
     // Done with the file so far...
@@ -588,8 +588,7 @@ if (is_uploaded_file($_FILES['uploadprogressFile']['tmp_name']))
                         $need .= "\n";
                    }
                }
-               else
-               {
+               else {
                    $naanies++;
                }
         }
